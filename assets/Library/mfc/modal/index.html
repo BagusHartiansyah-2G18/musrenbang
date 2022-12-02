@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 3
+      // document.write(header_.divider());
+      document.write(
+        modal_.ex1({
+          cls:"modal-dialog-centered modal-dialog-scrollable",
+          clsHeader:"",
+          clsBody:"",
+        })
+        +`
+          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalEx1">
+            Launch demo modal
+          </button>
+        `
+        +modal_.lines()
+        +modal_.toast()
+      );
+
+      modal_.setMo({
+        ex:1,
+        header:`<h1 class="modal-title fs-5" id="staticBackdropLiveLabel">Modal title</h1>`,
+        body:`<p>This is some placeholder content the <strong>Profile tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>`,
+        footer:modal_.btnClose("btn-secondary")
+      })
+
+
+    </script>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>

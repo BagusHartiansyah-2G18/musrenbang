@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 3
+      document.write(header_.divider());
+      document.write(
+        text_.span({cls:"display-7 fst-italic",text:"display-7 & fst-italic"})
+        +text_.span({cls:"display-6",text:"display-6"})
+        +text_.span({cls:"display-5",text:"display-5"})
+        +text_.span({cls:"display-4",text:"display-4"})
+        +text_.span({cls:"display-3",text:"display-3"})
+        +text_.span({cls:"display-2",text:"display-2"})
+        +text_.span({cls:"display-1",text:"display-1"})
+        +"<br>"
+        +text_.span({cls:"h7 fst-italic",text:"h7 & fst-italic"})
+        +text_.span({cls:"h6",text:"h6"})
+        +text_.span({cls:"h5",text:"h5"})
+        +text_.span({cls:"h4",text:"h4"})
+        +text_.span({cls:"h3",text:"h3"})
+        +text_.span({cls:"h2",text:"h2"})
+        +text_.span({cls:"h1",text:"h1"})
+
+        +text_.p({cls:"",
+          text:"Nama : "+text_.mark({text:"Bagus Hartiansyah"})
+        })
+      );
+    </script>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>

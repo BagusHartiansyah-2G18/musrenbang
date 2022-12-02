@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 1 
+      header_.hmenu=[];
+      header_.hmenu.push({htmlLi:`<a class="nav-link active text-dark" aria-current="page" href="#"><b>Nav1</b></a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({
+        htmlLi:`<a class="nav-link dropdown-toggle text-dark" href="#" data-bs-toggle="dropdown" aria-expanded="false">Dropdown nav</a>`,
+        subMenu:[
+          {htmlLi:`<li><a class="dropdown-item" href="#">Action</a></li>`},
+          {htmlLi:`<li><a class="dropdown-item" href="#">Action</a></li>`},
+          {htmlLi:`<li><a class="dropdown-item" href="#">Action</a></li>`}
+        ]
+      });
+      
+      
+      document.write(
+        header_.ex1({
+            clsExpand:"navbar navbar-expand navbar-dark bg-light",
+            clsContainer:"container",
+            htmlJudul:` <a class="navbar-brand text-dark" href="#"><img src="./file/2.png" width="250"> <b>Header ex1</b></a>`,
+            htmlMenu:header_.nav1({
+                      clsUl:"me-auto mb-2",
+                      clsLi:""
+                    })
+                    +`<div class="col-md-3 text-end">
+                        <button type="button" class="btn btn-outline-primary me-2">delete</button>
+                        <button type="button" class="btn btn-primary">Sign-up</button>
+                      </div>`
+        })
+      );
+
+
+      // view 2
+      dropdonw_.dmenu=[];
+      dropdonw_.dmenu.push({htmlLi:`<a class="dropdown-item judulFunc" href="#">dropdon ex1</a>`});
+      dropdonw_.dmenu.push({htmlLi:`<a class="dropdown-item" href="#">Settings</a>`});
+
+      header_.hmenu=[];
+      header_.hmenu.push({htmlLi:`<a href="#" class="nav-link active" aria-current="page"><b>Nav2</b></a>`});
+      header_.hmenu.push({htmlLi:`<a href="#" class="nav-link" aria-current="page">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a href="#" class="nav-link" aria-current="page">Home</a>`});
+      header_.hmenu.push({
+        htmlLi:dropdonw_.ex1({
+          clsDropdonw:"",
+          clsUl:" text-small",
+          clsLi:"",
+          htmlJudul:`
+            <a href="#" class="d-block link-dark nav-link text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+              dropdonw ex1
+            </a>`,
+        })
+      });
+
+    
+      document.write(
+        header_.ex1({
+            clsExpand:"navbar navbar-expand navbar-dark bg-light",
+            clsContainer:"container-fluid",
+            htmlJudul:` <a class="navbar-brand text-dark" href="#"><img src="./file/2.png" width="250"> <b>Header ex1</b></a>`,
+            htmlMenu:header_.nav2({
+                      clsUl:"me-auto mb-2",
+                      clsLi:""
+                    })
+                    +`<div class="col-md-3 text-end">`
+                      +dropdonw_.ex1({
+                          clsDropdonw:"",
+                          clsUl:" text-small",
+                          clsLi:"",
+                          htmlJudul:`
+                            <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle judulFunc" data-bs-toggle="dropdown" aria-expanded="false">
+                              <img src="../library/file/1.png" alt="mdo" width="32" height="32" class="rounded-circle">dropdonw ex1
+                            </a>`,
+                      })
+                      +`</div>`
+        })
+      );
+
+      // view 3
+      header_.hmenu=[];
+      header_.hmenu.push({htmlLi:`<a class="nav-link active text-dark" aria-current="page" href="#"><b>Nav3</b></a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      
+      
+      document.write(
+        header_.ex2({
+            clsContainer:"container border-bottom",
+            clsHeader:"navbar" ,
+            htmlJudul:`
+              <a href="/" class="align-items-center mb-3 mb-md-0  text-dark text-decoration-none">
+                <img src="../library/file/1.png" width="40"> 
+                <span class="fs-4">Header Exp 2</span>
+              </a>
+            `,
+            htmlMenu:header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    })
+        })
+        +header_.divider()
+      );
+
+      // view 4
+      header_.hmenu=[];
+      header_.hmenu.push({htmlLi:`<a class="nav-link active text-dark" aria-current="page" href="#"><b>Nav3</b></a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      
+      
+      document.write(
+        header_.ex2({
+            clsContainer:"container border-bottom",
+            clsHeader:"d-flex justify-content-center py-3" ,
+            htmlJudul:``,
+            htmlMenu:header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    })
+        })
+        +header_.divider()
+      );
+
+      // view 5
+      header_.hmenu=[];
+      header_.hmenu.push({
+        htmlLi:`<a href="#" class="nav-link text-secondary text-center">
+                <span class="mdi mdi-car-emergency d-block mdi-18px"></span>
+                Home11
+              </a>`
+      });
+      header_.hmenu.push({
+        htmlLi:`<a href="#" class="nav-link text-secondary text-center">
+                <span class="mdi mdi-map-marker-circle d-block mdi-18px"></span>
+                Home11
+              </a>`
+      });
+      
+      document.write(
+        header_.ex2({
+            clsContainer:"container-fluid border-bottom ",
+            clsHeader:"navbar" ,
+            htmlJudul:`
+            <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+              <img src="../library/file/1.png" width="40"> 
+            </a>
+            `,
+            htmlMenu:header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    })
+                    +`
+                    <div class="col-md-3 text-end">
+                      <button type="button" class="btn btn-outline-primary me-2">Login</button>
+                      <button type="button" class="btn btn-primary">Sign-up</button>
+                    </div>
+                    `
+        })
+        +header_.divider()
+      );
+    </script>
+
+    <h1>code 2</h1>
+    <!-- code 2  -->
+    <script>
+      // view 3
+      document.write(header_.divider());
+      header_.hmenu=[];
+      header_.hmenu.push({htmlLi:`<a class="nav-link active text-dark" aria-current="page" href="#"><b>Nav3</b></a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      
+      
+      document.write(
+        header_.ex3({
+            clsContainer:"container-fluid p-0 m-0 exBgImgC100",
+            clsHeader:"nav-pills d-flex p-3 exBgColorBlack40" ,
+            htmlJudul:`
+              <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img class="" src="../library/file/1.png" width="40"> 
+                <h3 class="judulApp ">Header Exp 2</h3>
+              </a>
+            `,
+            clsKeterangan:"d-flex align-items-center  my-3 text-white  p-3",
+            htmlKeterangan:button_.ex1(
+              {
+                clsGroup:"",
+                listBtn :[
+                  {
+                    text:`<span class="mdi mdi-web"></span>`,
+                    cls:" btn-sm btn-primary rounded",
+                    attr:""
+                  },{
+                    text:"Btn Group",
+                    cls:" btn-sm btn-secondary ",
+                    attr:""
+                  },{
+                    text:"Ex1",
+                    cls:" btn-sm btn-success",
+                    attr:""
+                  }
+                  
+                ],
+              }
+            ),
+            htmlMenu:header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    })
+        })
+      );
+
+      document.write(
+        header_.ex3({
+            clsContainer:"container-fluid p-0 m-0 exBgImgC100",
+            tukar:"Bagus H",
+
+            clsHeader:"nav-pills d-flex p-3 exBgColorBlack40" ,
+            htmlJudul:`
+              <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img class="" src="../library/file/1.png" width="40"> 
+                <h3 class="judulApp ">Header Exp 2 tukar</h3>
+              </a>
+            `,
+            htmlMenu:header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    }),
+            
+            clsKeterangan:"d-flex align-items-center  my-3 text-white  p-3 mhight100",
+            htmlKeterangan:button_.ex1(
+              {
+                clsGroup:"",
+                listBtn :[
+                  {
+                    text:`<span class="mdi mdi-web"></span>`,
+                    cls:" btn-sm btn-primary rounded",
+                    attr:""
+                  },{
+                    text:"Btn Group",
+                    cls:" btn-sm btn-secondary ",
+                    attr:""
+                  },{
+                    text:"Ex1",
+                    cls:" btn-sm btn-success",
+                    attr:""
+                  }
+                  
+                ],
+              }
+            ),
+            
+        })
+      );
+      document.write(header_.divider());
+      document.write(
+        header_.ex4({
+            clsContainer:"container",
+            clsHeader:"collapse bg-dark" ,
+            clsJudul:"navbar-dark bg-dark shadow-sm",
+            idCollapse:"idCollapse1",
+            tukar:"Bagus H",
+            htmlJudul:`
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <strong>Album Tukar</strong>
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#idCollapse1" aria-controls="idCollapse1" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+            `,
+            htmlKeterangan:`
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                <h4 class="text-white">About</h4>
+                <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+                </div>
+                <div class="col-sm-3 offset-md-1 py-4">
+                <h4 class="text-white">Contact</h4>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                    <li><a href="#" class="text-white">Like on Facebook</a></li>
+                    <li><a href="#" class="text-white">Email me</a></li>
+                </ul>
+                </div>
+            </div>
+            `
+        })
+      );
+      document.write(
+        header_.ex4({
+            clsContainer:"container-fluid",
+            clsHeader:"collapse exBgImgC100 show" ,
+            clsJudul:"navbar-dark bg-dark shadow-sm",
+            tukar:"Bagus H",
+            idCollapse:"idCollapse2",
+            htmlJudul:`
+              <a href="#" class="navbar-brand d-flex align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" aria-hidden="true" class="me-2" viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                  <strong>Album</strong>
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#idCollapse2" aria-controls="idCollapse2" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+            `,
+            htmlKeterangan:`
+            <div class="row">
+                <div class="col-sm-8 col-md-7 py-4">
+                <h4  >About</h4>
+                <p class="text-muted">Add some information about the album below, the author, or any other background context. Make it a few sentences long so folks can pick up some informative tidbits. Then, link them off to some social networking sites or contact information.</p>
+                </div>
+                <div class="col-sm-3 offset-md-1 py-4">`
+                  +header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    })
+                +`</div>
+            </div>
+            `
+        })
+      );
+      
+      document.write(
+        header_.ex5({
+          clsCover:"container-fluid exBgImgC d-flex p-3 mx-auto flex-column",
+          header:header_.ex2({
+                  clsContainer:"container border-bottom",
+                  clsHeader:"navbar" ,
+                  htmlJudul:`
+                    <a href="/" class="align-items-center mb-3 mb-md-0  text-dark text-decoration-none">
+                      <img src="../library/file/1.png" width="40"> 
+                      <span class="fs-4">Header Exp 2 & exp 5</span>
+                    </a>
+                  `,
+                  htmlMenu:header_.nav3({
+                            clsUl:"",
+                            clsLi:""
+                          })
+              }),
+          clsMain:"p-3 container mhight250",
+          htmlMain:`
+            <h1>Cover your page.</h1>
+            <p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
+            <p class="lead">
+              <a href="#" class="btn btn-lg btn-secondary fw-bold border-white bg-white">Learn more</a>
+            </p>
+          `,
+      })
+      );
+    </script>
+  </main>
+  <script>
+    // header_.endBootstrap(2);
+    header_.endBootstrap(10);
+  </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <div class="col-6 p-3">
+      <script>
+        // view 3
+        // document.write(header_.divider());
+        document.write(
+          input_.ex1({
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:`placeholder="ex1"`
+          })
+          +input_.lines()
+          +input_.ex2({
+            clsDiv:"mb-3",
+            text:"Username",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:`placeholder="ex2"`
+          })
+          +input_.lines()
+          +input_.ex3({
+            clsDiv:"mb-3",
+            text:"Username",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:`placeholder="ex3"`,
+            ket:"We'll never share your email with anyone else."
+          })
+          +input_.lines()
+          +input_.ex2({
+            clsDiv:"mb-3",
+            text:"File PDF",
+            id:"text",
+            tipe:"file",
+            cls:"form-control",
+            attr:``
+          })
+          +input_.ex4({
+            clsDiv:"input-group mb-3",
+            clsInput:" bg-info",
+            text:"Username",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:`placeholder="ex4 "`,
+          }) 
+          +input_.ex4({
+            clsDiv:"input-group mb-3",
+            clsInput:" bg-info",
+            tukar:"Bagus H",
+            text:"Username",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:`placeholder="ex4 tukar"`,
+          }) 
+          +input_.ex5({
+            clsDiv:"input-group mb-3",
+            clsInput:" bg-info",
+            tukar:"Bagus H",
+            textS:"$",
+            textE:".00",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:`placeholder="ex5"`,
+          }) 
+
+          +input_.lines()
+          +input_.ex6({
+            clsDiv:"mb-3",
+            text:"ex6",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:``
+          })
+          +input_.lines()
+          +input_.ex7({
+            clsDiv:"mb-3",
+            text:"email",
+            id:"text",
+            tipe:"text",
+            cls:"form-control",
+            attr:``,
+            respValidasi:input_.respValidasiT("Bagus!")
+            +input_.respValidasiF("manimal 4 carakter!")
+          })
+          +input_.ex7({
+            clsDiv:"mb-3",
+            text:"email",
+            id:"text",
+            tipe:"text",
+            cls:"form-control is-invalid",
+            attr:``,
+            respValidasi:input_.respValidasiT("Bagus!")
+            +input_.respValidasiF("manimal 4 carakter!")
+          })
+          +input_.ex7({
+            clsDiv:"mb-3",
+            text:"email",
+            id:"text",
+            tipe:"text",
+            cls:"form-control is-valid",
+            attr:``,
+            respValidasi:input_.respValidasiT("Bagus!")
+            +input_.respValidasiF("manimal 4 carakter!")
+          })
+
+
+          +input_.lines()
+          +input_.check1({
+            cls:"form-check-input",
+            id:"check"
+          }) 
+          +input_.check2({
+            clsDiv:"mb-3 form-check",
+            cls:"form-check-input",
+            id:"check",
+            text:"ex check 2",
+            attr:`style="float:right;"`,
+          }) 
+          +input_.check2({
+            clsDiv:"mb-3 form-check",
+            cls:"form-check-input",
+            id:"check",
+            text:"ex check 2",
+            attr:``,
+          }) 
+          +input_.check2({
+            clsDiv:"mb-3 form-check form-switch",
+            cls:"form-check-input",
+            id:"check",
+            text:"ex check 2 switch",
+            attr:``,
+          }) 
+          +input_.check2({
+            clsDiv:"mb-3 form-check form-switch",
+            cls:"form-check-input",
+            id:"check",
+            text:"ex check 2 switch",
+            attr:`style="float:right;"`,
+          }) 
+
+          +input_.lines()
+          +input_.radio1({
+            cls:"form-check-input",
+            id:"radio",
+            name:"radios",
+            attr:""
+          })
+          +input_.radio2({
+            clsDiv:"mb-3 form-check",
+            cls:"form-check-input",
+            id:"radio",
+            name:"radios",
+            text:"ex radio 2",
+            attr:``,
+          }) 
+          +input_.radio2({
+            clsDiv:"mb-3 form-check",
+            cls:"form-check-input",
+            id:"radio",
+            name:"radios",
+            text:"ex radio 2",
+            attr:`style="float:right;"`,
+          }) 
+
+          +input_.lines()
+          +input_.select({
+            cls:"form-select",
+            id:"select",
+            attr:` style="padding-inline-start: 30px;"`,
+            list:[
+              {value:"bgs",valueName:"Bagus h"},
+              {value:"ain",valueName:"amin ku"}
+            ],
+          })
+          
+        );
+      </script>
+      </div>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>

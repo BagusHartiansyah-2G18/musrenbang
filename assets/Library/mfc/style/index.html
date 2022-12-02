@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 3
+      document.write(header_.divider());
+      header_.hmenu=[];
+      header_.hmenu.push({htmlLi:`<a class="nav-link active text-dark" aria-current="page" href="#"><b>Nav3</b></a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      header_.hmenu.push({htmlLi:`<a class="nav-link text-dark" aria-current="page" href="#">Home</a>`});
+      
+      
+      document.write(
+        header_.ex3({
+            clsContainer:"container-fluid  p-3 ex3",
+            clsHeader:"nav-pills d-flex p-3 border-bottom" ,
+            htmlJudul:`
+              <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+                <img class="" src="../library/file/1.png" width="40"> 
+                <h3 class="judulApp">Header Exp 2</h3>
+              </a>
+            `,
+            htmlMenu:header_.nav3({
+                      clsUl:"",
+                      clsLi:""
+                    })
+        })
+      );
+    </script>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>

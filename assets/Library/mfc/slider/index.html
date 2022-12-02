@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 3
+      // document.write(header_.divider());
+      document.write(
+        slider_.ex1({
+        id:"carouselExampleCaptions",
+        list:[
+          {
+            file:`<svg class="bd-placeholder-img bd-placeholder-img-lg d-block w-100" width="800" height="400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: First slide" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#777"/><text x="50%" y="50%" fill="#555" dy=".3em">First slide</text></svg>`,
+            cls:" d-none d-md-block",
+            html:`<h5>First slide label</h5>
+            <p>Some representative placeholder content for the first slide.</p>`
+          },{
+            file:slider_.getFileH({
+                url:"../library/file/background-4825512__340.jpg",
+                height:"400px",
+                color:"black",
+                opacityDiv:"0.6",
+                opacityImg:"0.4"
+              }),
+            cls:" d-none d-md-block",
+            attr:"",
+            html:`<h5>slide label</h5>
+            <p>Some representative placeholder content for the first slide.</p>`
+          }
+        ]
+      })
+      );
+    </script>
+  </main>
+  <script>
+    header_.endBootstrap(10);
+  </script>
+</body>
+</html>

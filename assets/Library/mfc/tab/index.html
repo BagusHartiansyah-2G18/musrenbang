@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 3
+      // document.write(header_.divider());
+      document.write(
+        tab_.ex1({
+          clsTab:"shadow col-4",
+          id:"tab1",
+          clsHBody:"",
+          clsHeader:"bg-info form-control p-3",
+          htmlHeader:"Tahapan 1",
+          clsBody:"p-2",
+          htmlBody:"It is hidden by default, until the collapse plugin adds the"
+        })
+        +tab_.ex1({
+          clsTab:"shadow col-4",
+          id:"tab2",
+          clsHBody:" show",
+          clsHeader:"bg-primary form-control p-3",
+          htmlHeader:"Tahapan 2",
+          clsBody:"p-2",
+          htmlBody:"It is hidden by default, until the collapse plugin adds the"
+        })
+        +card_.divider()
+        +card_.ex2({
+          clsCard: "col-4",
+          file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+          clsHeader:"",
+          htmlHeader:"Informasi Penerimaan",
+          clsBody:"",
+          tukar:"Bagus H",
+          htmlBody:tab_.ex2({
+                      id:"tab2",
+                      tab:[
+                        {
+                          text:'Home',
+                          cls:'',
+                          active:"show active",
+                          html:`
+                            <p>This is some placeholder content the <strong>Home tab's</strong> associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. You can use it with tabs, pills, and any other <code>.nav</code>-powered navigation.</p>
+                          `,
+                        },{
+                          text:'Agenda',
+                          cls:'',
+                          html:`
+                            <p>Bagus H</p>
+                          `, 
+                        }
+                      ]
+                    })
+            })
+         
+      );
+    </script>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>

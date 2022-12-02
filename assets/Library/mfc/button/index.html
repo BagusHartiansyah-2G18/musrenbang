@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      // view 3
+      // document.write(header_.divider());
+      document.write(
+        button_.ex1({
+          clsGroup:"",
+          listBtn :[
+            {
+              text:`<span class="mdi mdi-web"></span>`,
+              cls:" btn-sm btn-primary rounded",
+              attr:""
+            },{
+              text:"Btn Group",
+              cls:" btn-sm btn-secondary ",
+              attr:""
+            },{
+              text:"Ex1",
+              cls:" btn-sm btn-success",
+              attr:""
+            }
+            
+          ],
+        })
+        +button_.lines()
+        +button_.ex3({
+          text:`<span class="mdi mdi-web"></span>sasa`,
+          cls:"btn-sm btn-primary",
+          msg:"Aksi ini sedang di kunci",
+          posisi:"top"
+        })
+      )
+    </script>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>
