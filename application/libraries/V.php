@@ -5,13 +5,13 @@
         public $app=[
             "rxxx"=>['Mk','x','OA'],
             "kd"=>"MFC2G18-05",
-            "nm"=>"E-Musrenbang",
+            "nm"=>"E-MUSRENBANG",
             "nama"=>"M Software Center",
-            "logo"=>"logo/logoKSB.png",
+            "logo"=>"1.png",
             "copyright"=>"Copyright © BappedaKSB",
             "loader"=>'loader.webp',
             "unik"=>"MFC-",
-            "qmem"=>"bp"
+            "qmem"=>"bp",
         ];
         var $kdApp="MFC2G18-05";//06 tgl/10/bulan/21/tahun
         function _getUrl($nama){
@@ -85,7 +85,10 @@
             $furl=$this->_getAssetUrl()."fs_componen/plugins/";
             $furl1=$this->_getAssetUrl()."fs_componen/bower_components/datatables.net-bs/";
             return '
-            
+                <script src="'.$furl.'toastr/toastr.min.js"></script>
+                    
+                <script src="'.$furl.'sweetalert2/sweetalert2.min.js"></script>
+                <script src="'.$furl.'sweetalert2/sweetalert2.all.min.js"></script>
                 
                 <script src="'.$furl.'datatables/jquery.dataTables.min.js"></script>
                 <script src="'.$furl.'datatables/jquery.dataTables.js"></script>
@@ -246,14 +249,6 @@
             // 
             //     <script src="'.$this->_getAssetUrl()."excel/lib/".'zip.js"></script>
 
-        }
-        function _qCekKey($kodeForm,$kodeMember){
-            return "SELECT 
-                * 
-            FROM member a 
-            JOIN appKey b on
-                a.kdMember1 =b.kdMember
-            WHERE b.kdFitur='".$kodeForm."' AND b.kdMember='".$kodeMember."' AND b.kunci=0";
         }
         function _isCode(){
             return "1933f89iG";

@@ -2,13 +2,13 @@ class Modal_ extends LibMfcHtml{
     ex1=(v)=>{
       // cls : modal-fullscreen, modal-dialog-centered ,modal-dialog-scrollable 
       return this.mo1({
-        id:"modalEx1",
+        id:"modalEx"+(v.ind!=undefined?v.ind:1),
         cls:v.cls,
         clsHeader:v.clsHeader,
-        idHeader:"modalH1",
+        idHeader:"modalH"+(v.ind!=undefined?v.ind:1),
         clsBody:v.clsBody,
-        idBody:"modalB1",
-        idFooter:"modalF1"
+        idBody:"modalB"+(v.ind!=undefined?v.ind:1),
+        idFooter:"modalF"+(v.ind!=undefined?v.ind:1)
       })
     }
     mo1=(v)=>{

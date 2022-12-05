@@ -490,6 +490,26 @@ function _tabel(v){
                 )+`</td>`;
                 kond=false;
             }
+            f1data=v2.split("&");
+            if(f1data.length==2){
+                fdata+=`<td>`+v1[f1data[0]]+` `+v1[f1data[1]]+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("<tm2>");
+            if(f1data.length==2){
+                fdata+=`<td>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(1,20)+"...":v1[f1data[0]])+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("<tm3>");
+            if(f1data.length==2){
+                fdata+=`<td>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(1,30)+"...":v1[f1data[0]])+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("<tm5>");
+            if(f1data.length==2){
+                fdata+=`<td>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(1,50)+"...":v1[f1data[0]])+`</td>`;
+                kond=false;
+            }
             if(kond){
                 fdata+=`<td>`+v1[v2]+`</td>`;
             }

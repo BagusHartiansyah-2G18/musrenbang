@@ -1,0 +1,83 @@
+.exBgImgC{
+    background-image: url('./file/clouds-2725520_960_720.jpg');
+    background-size: cover;
+  }
+  .exBgImgC100{
+    background-image: url('./file/clouds-2725520_960_720.jpg');
+    background-size: cover;
+    min-height: 100px;
+  }
+  .exBgImgC250{
+    background-image: url('./file/clouds-2725520_960_720.jpg');
+    background-size: cover;
+    min-height: 250px;
+  }
+  
+  .bgC1{
+    background-image: url('./file/bg-c1.jpg');
+    background-size: cover;
+  }
+  .bgC2{
+    background-image: url('./file/bg-c2.jpg');
+    background-size: cover;
+  }
+  .bgC3{
+    background-image: url('./file/bg-c3.jpg');
+    background-size: cover;
+  }
+  .bgC4{
+    background-image: url('./file/bg-c4.jpg');
+    background-size: cover;
+  }
+  .bgC5{
+    background-image: url('./file/bg-c5.jpg');
+    background-size: cover;
+  }
+  .bgC6{
+    background-image: url('./file/bg-c6.jpg');
+    background-size: cover;
+  }
+  
+  
+  .bgCAbs7{
+    background-image: url('./file/bg-abs7.jpg');
+    background-size: cover;
+  }
+  .bgCAbs8{
+    background-image: url('./file/bg-abs8.jpg');
+    background-size: cover;
+  }
+  .bgCAbs15{
+    background-image: url('./file/bg-abs15.jpg');
+    background-size: cover;
+  }
+  .bgCAbs17{
+    background-image: url('./file/bg-abs17.jpg');
+    background-size: cover;
+  }
+  
+  
+  .bgksb1{
+    background-image: url('./file/ksb1.jpg');
+    background-size: cover;
+  }
+  .bgksb2{
+    background-image: url('./file/ksb2.png');
+    background-size: cover;
+  }
+  .bgksb3{
+    background-image: url('./file/bg-c3.jpg');
+    background-size: cover;
+  }
+  .bgksb4{
+    background-image: url('./file/bg-c4.jpg');
+    background-size: cover;
+  }
+  .bgksb5{
+    background-image: url('./file/bg-c5.jpg');
+    background-size: cover;
+  }
+  .bgksb6{
+    background-image: url('./file/bg-c6.jpg');
+    background-size: cover;
+  }

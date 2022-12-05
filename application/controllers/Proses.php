@@ -7,15 +7,14 @@ class Proses extends CI_Controller {
         parent::__construct();
         $this->mbgs->_setBaseUrl(base_url());
         $this->_=array();
-        
-        $this->_=array_merge($this->_,$this->mbgs->_getBasisData());
 
         $this->kd=$this->sess->kdMember;
         $this->nm=$this->sess->nama;
         $this->kdJabatan=$this->sess->kdMemberJabatan;
-        $this->kdDinas=$this->sess->kdMemberDinas;
+        $this->kdDinas=$this->sess->kdDinas;
         $this->tahun=$this->sess->tahun;
-
+        $this->tahapan=$this->sess->tahapan;
+        
         $this->qtbl=_getNKA("c-prod",true);
         // $this->qtbl['p-kant']['nm']
     }
@@ -40,7 +39,7 @@ class Proses extends CI_Controller {
         }
 
         $q="select * from member where kdDinas='".$kdDinas."' and UPPER(nmMember)=UPPER('".$username."') and 
-            UPPER(password)=UPPER('".$password."') and kdApp='".$this->_['kd']."'
+            UPPER(password)=UPPER('".$password."') and kdApp='".$this->mbgs->_getBasisData()['kd']."'
         ";
         // return print_r($this->_);
         $member=$this->qexec->_func($q);
@@ -55,74 +54,152 @@ class Proses extends CI_Controller {
     }
 
 
-    // basis data
-    public function insJabatan(){
+    // usulan
+    public function changePrioritas(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
         }else{
             $baseEND=json_decode((base64_decode($_POST['data'])));
-            $jabatan   =$baseEND->{'jabatan'};
+            $kdKec   =$baseEND->{'kdKec'};
+            $kdPri   =$baseEND->{'kdPri'};
+            $tahun   =$baseEND->{'tahun'};
+            $this->_['data']=$this->qexec->_func(_dtsubMusrenbang($kdKec,$this->tahapan," a.idPri='".$kdPri."' and a.tahun='".$tahun."' "));
+            return $this->mbgs->resTrue($this->_);
+        }
+    }
+    public function insUsulan(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $masalah  =$baseEND->{'masalah'};
+            $uraianPekerjaan    =$baseEND->{'uraianPekerjaan'};
+            $desa  =$baseEND->{'desa'};
+            $lokasi    =$baseEND->{'lokasi'};
+
+            $volume  =$baseEND->{'volume'};
+            $satuan    =$baseEND->{'satuan'};
+            $paguAnggaran  =$baseEND->{'paguAnggaran'};
+            $val    =json_decode((base64_decode($baseEND->{'val'})));
+
             
-            $keyTabel="kdJabatan";
-            $kdTabel=$this->qexec->_func("select ".$keyTabel." from jabatan ORDER BY cast(".$keyTabel." as int) DESC limit 1");
+            $keyTabel="id";
+            $kdTabel=$this->qexec->_func("select ".$keyTabel." from musrembang where kdKec='".$val->kdKec."'
+                and tahun='".$val->tahun."' and tahapan='".$this->tahapan."'
+                ORDER BY cast(".$keyTabel." as int) DESC limit 1
+            ");
             if(count($kdTabel)>0){
                 $kdTabel=$kdTabel[0][$keyTabel]+1;
             }else{
                 $kdTabel=1;
             }
             $q="
-                INSERT INTO jabatan(kdJabatan, kdJabatan1, nmJabatan) VALUES 
-                (
-                    ".$this->mbgs->_valforQuery($kdTabel).",
-                    ".$this->mbgs->_valforQuery("jaba-".$kdTabel).",
-                    ".$this->mbgs->_valforQuery($jabatan)."
+                INSERT INTO `musrembang`(
+                    `id`, `kdKec`, `kdDinas`, `kdSub`, 
+                    `prioritas`, `masalah`, `uraianPekerjaan`, 
+                    `desa`, `lokasi`, `volume`, 
+                    `satuan`, `paguAnggaran`,
+                    `tahapan`, `tahun`
+                )values(
+                    ".$this->mbgs->_valforQuery($kdTabel).",".$this->mbgs->_valforQuery($val->kdKec).",".$this->mbgs->_valforQuery($val->kdDinas).",
+                        ".$this->mbgs->_valforQuery($val->kdSub).",
+                    ".$this->mbgs->_valforQuery($val->kdPri).",".$this->mbgs->_valforQuery($masalah).",".$this->mbgs->_valforQuery($uraianPekerjaan).",
+                    ".$this->mbgs->_valforQuery($desa).",".$this->mbgs->_valforQuery($lokasi).",".$this->mbgs->_valforQuery($volume).",
+                    ".$this->mbgs->_valforQuery($satuan).",".$this->mbgs->_valforQuery($paguAnggaran).",
+                    ".$this->mbgs->_valforQuery($this->tahapan).",".$this->mbgs->_valforQuery($val->tahun)."
                 )
             ";
-            // return print_r($q);
             $check=$this->qexec->_proc($q);
             if($check){
-                $this->_['data']=$this->qexec->_func(_jabatan(""));
+                $this->_['data']=$this->qexec->_func(
+                    _dmusrenbang(" 
+                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
+                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
+                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
+                        GROUP BY id
+                    ")
+                );
                 return $this->mbgs->resTrue($this->_);
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
             }
         }
     }
-    public function updJabatan(){
+    public function updUsulan(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
         }else{
             $baseEND=json_decode((base64_decode($_POST['data'])));
-            $kdJabatan  =$baseEND->{'kdJabatan'};
-            $jabatan    =$baseEND->{'jabatan'};
+            $masalah  =$baseEND->{'masalah'};
+            $uraianPekerjaan    =$baseEND->{'uraianPekerjaan'};
+            $desa  =$baseEND->{'desa'};
+            $lokasi    =$baseEND->{'lokasi'};
+
+            $volume  =$baseEND->{'volume'};
+            $satuan    =$baseEND->{'satuan'};
+            $paguAnggaran  =$baseEND->{'paguAnggaran'};
+            $val    =json_decode((base64_decode($baseEND->{'val'})));
+            $id     =$baseEND->{'id'};
 
             $q="
-                update jabatan set nmJabatan=".$this->mbgs->_valforQuery($jabatan)."
-                where kdJabatan=".$this->mbgs->_valforQuery($kdJabatan)."
+                update `musrembang` set
+                    `masalah`=".$this->mbgs->_valforQuery($masalah).", `uraianPekerjaan`=".$this->mbgs->_valforQuery($uraianPekerjaan).", 
+                    `desa`=".$this->mbgs->_valforQuery($desa).", `lokasi`=".$this->mbgs->_valforQuery($lokasi).", 
+                    `volume`=".$this->mbgs->_valforQuery($volume).", `satuan`=".$this->mbgs->_valforQuery($satuan).", 
+                    `paguAnggaran`=".$this->mbgs->_valforQuery($paguAnggaran)."
+                    
+                    where 
+                    `id`=".$this->mbgs->_valforQuery($id)." and
+                    `kdKec`=".$this->mbgs->_valforQuery($val->kdKec)." and
+                    `kdDinas`=".$this->mbgs->_valforQuery($val->kdDinas)." and
+                    `kdSub`=".$this->mbgs->_valforQuery($val->kdSub)." and
+                    `prioritas`=".$this->mbgs->_valforQuery($val->kdPri)." and
+                    `tahapan`=".$this->mbgs->_valforQuery($this->tahapan)." and
+                    `tahun`=".$this->mbgs->_valforQuery($val->tahun)."
             ";
             $check=$this->qexec->_proc($q);
             if($check){
-                $this->_['data']=$this->qexec->_func(_jabatan(""));
+                $this->_['data']=$this->qexec->_func(
+                    _dmusrenbang(" 
+                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
+                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
+                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
+                        GROUP BY id
+                    ")
+                );
                 return $this->mbgs->resTrue($this->_);
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
             }
         }
     }
-    public function delJabatan(){
+    public function delUsulan(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
         }else{
             $baseEND=json_decode((base64_decode($_POST['data'])));
-            $kdJabatan  =$baseEND->{'kdJabatan'};
-
+            $val    =json_decode((base64_decode($baseEND->{'val'})));
+            $id     =$baseEND->{'id'};
             $q="
-                delete from jabatan
-                where kdJabatan=".$this->mbgs->_valforQuery($kdJabatan)."
+                delete from `musrembang` where 
+                    `id`=".$this->mbgs->_valforQuery($id)." and
+                    `kdKec`=".$this->mbgs->_valforQuery($val->kdKec)." and
+                    `kdDinas`=".$this->mbgs->_valforQuery($val->kdDinas)." and
+                    `kdSub`=".$this->mbgs->_valforQuery($val->kdSub)." and
+                    `prioritas`=".$this->mbgs->_valforQuery($val->kdPri)." and
+                    `tahapan`=".$this->mbgs->_valforQuery($this->tahapan)." and
+                    `tahun`=".$this->mbgs->_valforQuery($val->tahun)."
             ";
             $check=$this->qexec->_proc($q);
             if($check){
-                $this->_['data']=$this->qexec->_func(_jabatan(""));
+                $this->_['data']=$this->qexec->_func(
+                    _dmusrenbang(" 
+                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
+                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
+                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
+                        GROUP BY id
+                    ")
+                );
                 return $this->mbgs->resTrue($this->_);
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
@@ -130,665 +207,119 @@ class Proses extends CI_Controller {
         }
     }
 
-
-    public function insDinas(){
+    // fitur setting 
+    public function updMember(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
         }else{
             $baseEND=json_decode((base64_decode($_POST['data'])));
-            $kdDinas    =$baseEND->{'kdDinas'};
-            $nmDinas    =$baseEND->{'nmDinas'};
-            $kadis      =$baseEND->{'kadis'};
-            $nip        =$baseEND->{'nip'};
-            
-            $q="
-                INSERT INTO dinas(kdDinas, nmDinas,kadis, nip, taDinas) VALUES
-                (
-                    ".$this->mbgs->_valforQuery($kdDinas).",
-                    ".$this->mbgs->_valforQuery($nmDinas).",
-                    ".$this->mbgs->_valforQuery($kadis).",
-                    ".$this->mbgs->_valforQuery($nip).",
-                    ".$this->mbgs->_valforQuery($this->tahun)."
-                )
-            ";
-            // return print_r($q);
-            $check=$this->qexec->_proc($q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_dinas(" where taDinas='".$this->tahun."'"));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
-            }
-        }
-    }
-    public function updDinas(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $kdDinas    =$baseEND->{'kdDinas'};
-            $nmDinas    =$baseEND->{'nmDinas'};
-            $kadis      =$baseEND->{'kadis'};
-            $nip        =$baseEND->{'nip'};
-            
-            $q="
-                update dinas set 
-                    nmDinas=".$this->mbgs->_valforQuery($nmDinas).",
-                    kadis=".$this->mbgs->_valforQuery($kadis).", 
-                    nip=".$this->mbgs->_valforQuery($nip)."
-                where kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
-                taDinas=".$this->mbgs->_valforQuery($this->tahun)."
-            ";
-            // return print_r($q);
-            $check=$this->qexec->_proc($q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_dinas(" where taDinas='".$this->tahun."'"));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
-            }
-        }
-    }
-    public function delDinas(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $kdDinas    =$baseEND->{'kdDinas'};
-            
-            $q="
-                delete from dinas
-                where kdDinas=".$this->mbgs->_valforQuery($kdDinas)." and 
-                taDinas=".$this->mbgs->_valforQuery($this->tahun)."
-            ";
-            // return print_r($q);
-            $check=$this->qexec->_proc($q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_dinas(" where taDinas='".$this->tahun."'"));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
-            }
-        }
-    }
-
-    public function insTahun(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $nama       =$baseEND->{'nama'};
-            $status     =$baseEND->{'status'};
-            $perubahan  =$baseEND->{'perubahan'};
-            
-            $q="
-                INSERT INTO tahun(nama, perubahan,status) VALUES
-                (
-                    ".$this->mbgs->_valforQuery($nama).",
-                    ".$this->mbgs->_valforQuery($perubahan).",
-                    ".$this->mbgs->_valforQuery($status)."
-                )
-            ";
-            // return print_r($q);
-            $check=$this->qexec->_proc($q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_tahun(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses penyimpanan !!!");
-            }
-        }
-    }
-    public function delTahun(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $nama       =$baseEND->{'nama'};
-            $perubahan  =$baseEND->{'perubahan'};
-            
-            $q="
-                delete from tahun
-                where nama=".$this->mbgs->_valforQuery($nama)." and 
-                perubahan=".$this->mbgs->_valforQuery($perubahan)."
-            ";
-            // return print_r($q);
-            $check=$this->qexec->_proc($q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_tahun(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
-            }
-        }
-    }
-    public function tahunSelected(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $nama       =$baseEND->{'nama'};
-            $perubahan  =$baseEND->{'perubahan'};
-            
-            $q="
-                update tahun set selected=0;
-                update tahun set selected=1
-                where nama=".$this->mbgs->_valforQuery($nama)." and 
-                    perubahan=".$this->mbgs->_valforQuery($perubahan)."
-            ";
-            // return print_r($q);
-            $check=$this->qexec->_multiProc($q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_tahun(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
-            }
-        }
-    }
-    
-    
-    
-    
-    
-
-    function insMember(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("c-prod",false));
-        // if($portal['exec']){
-        $baseEND=json_decode((base64_decode($_POST['data'])));
-    
-        $kdJabatan   =$baseEND->{'kdJabatan'};
-        $username    =$baseEND->{'username'};
-        $password    =$baseEND->{'password'};
-        $nik         =$baseEND->{'nik'};
-        $email       =$baseEND->{'email'};
-        $kdDinas     =$baseEND->{'kdDinas'};
-        
-        $keyTabel="kdMember";
-        $kdTabel=$this->qexec->_func("select ".$keyTabel." from member ORDER BY cast(".$keyTabel." as int) DESC limit 1");
-        if(count($kdTabel)>0){
-            $kdTabel=$kdTabel[0][$keyTabel]+1;
-        }else{
-            $kdTabel=1;
-        }
-
-        $kdMemberx=$this->mbgs->app['unik'].$this->qtbl['p-memb']['nm'].$kdTabel;
-        
-        $q="INSERT INTO member(kdMember,kdMember1, kdDinas, nmMember, nik, password, email,kdJabatan) VALUES(
-            ".$this->mbgs->_valforQuery($kdTabel).",".$this->mbgs->_valforQuery($kdMemberx).",
-            ".$this->mbgs->_valforQuery($kdDinas).",".$this->mbgs->_valforQuery($username).",
-            ".$this->mbgs->_valforQuery($nik).",".$this->mbgs->_valforQuery($password).",
-            ".$this->mbgs->_valforQuery($email).",".$this->mbgs->_valforQuery($kdJabatan)."
-        )";
-        // return print_r($q);
-        $check=$this->qexec->_proc($q);
-        if($check){
-            $this->_['member']=$this->qexec->_func(_member(""));
-            return $this->mbgs->resTrue($this->_);
-        }else{
-            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-        }
-        // }return $this->mbgs->resFalse($portal['msg']);
-    }
-    function updMember(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }
-        $baseEND=json_decode((base64_decode($_POST['data'])));
-    
-        $kdJabatan   =$baseEND->{'kdJabatan'};
-        $username    =$baseEND->{'username'};
-        $password    =$baseEND->{'password'};
-        $nik         =$baseEND->{'nik'};
-        $email       =$baseEND->{'email'};
-        $kdDinas     =$baseEND->{'kdDinas'};
-        $kdMember     =$baseEND->{'kdMember'};
-        $kdMemberx=$this->mbgs->app['unik'].$this->qtbl['p-memb']['nm'].$kdMember;
-        
-        $q="
-            delete from member where kdMember='".$kdMember."';
-            INSERT INTO member(kdMember,kdMember1, kdDinas, nmMember, nik, password, email,kdJabatan) VALUES(
-                ".$this->mbgs->_valforQuery($kdMember).",".$this->mbgs->_valforQuery($kdMemberx).",
-                ".$this->mbgs->_valforQuery($kdDinas).",".$this->mbgs->_valforQuery($username).",
-                ".$this->mbgs->_valforQuery($nik).",".$this->mbgs->_valforQuery($password).",
-                ".$this->mbgs->_valforQuery($email).",".$this->mbgs->_valforQuery($kdJabatan)."
-            )
-        ";
-        // return print_r($q);
-        $check=$this->qexec->_multiProc($q);
-        // $check=true;
-        if($check){
-
-            $this->_['member']=$this->qexec->_func(_member(""));
-            return $this->mbgs->resTrue($this->_);
-        }else{
-            return $this->mbgs->resFalse("Terjadi Kesalahan saat Penyimpanan data");
-        }
-        // $q=substr($judul,0,strlen(trim($judul))-1).";";
-        // $q.=substr($rincian,0,strlen(trim($rincian))-1);
-
-        
-    }
-    function delMember(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }
-        $baseEND=json_decode((base64_decode($_POST['data'])));
-        
-        $kdMember     =$baseEND->{'kdMember'};
-
-        $q="
-            delete from member 
-            where kdMember=".$this->mbgs->_valforQuery($kdMember)."
-        ";
-        $check=$this->qexec->_multiProc($q);
-        if($check){
-            
-            $this->_['member']=$this->qexec->_func(_member(""));
-            return $this->mbgs->resTrue($this->_);
-        }else{
-            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-        }
-    }
-
-    //e renja
-    public function ebOnOFfKey(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $query   =$baseEND->{'query'};
-            $kdDinas   =$baseEND->{'kdDinas'};
-            
-            $check=$this->qexec->_proc($query);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_keySub($kdDinas,$this->tahun,""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
-            }
-        }
-    }
-    function saveAdminGroup(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }
-        $baseEND=json_decode((base64_decode($_POST['data'])));
-        $query   =$baseEND->{'query'};
-        $member =$baseEND->{'member'};
-        $check=$this->qexec->_multiProc($query);
-        if($check){
-            $this->_['dinas']=$this->qexec->_func(_cbDinasForAG($member," where taDinas='".$this->tahun."'"));
-            return $this->mbgs->resTrue($this->_);
-        }else{
-            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-        }
-        // }return $this->mbgs->resFalse($portal['msg']);
-    }
-    function getDinasAdminGroup(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }
-        $baseEND=json_decode((base64_decode($_POST['data'])));
-        $member =$baseEND->{'member'};
-        $this->_['dinas']=$this->qexec->_func(_cbDinasForAG($member," where taDinas='".$this->tahun."'"));
-        return $this->mbgs->resTrue($this->_);
-    }
-    function kunciOpd(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }
-        $baseEND=json_decode((base64_decode($_POST['data'])));
-        $query =$baseEND->{'query'};
-        $check=$this->qexec->_proc($query);
-        if($check){
-            return $this->mbgs->resTrue($this->_);
-        }else{
-            return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-        }
-    }
-    public function getSubOpd(){
-        $kondisi=false;
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $kdDinas   =$baseEND->{'kdDinas'};
-            
-            $this->_['data']=$this->qexec->_func(_keySub($kdDinas,$this->tahun,""));
-            return $this->mbgs->resTrue($this->_);
-        }
-    }
-    
-
-    
-    // pengaturan
-    function export(){
-        if($this->sess->kdMember==null){
-            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
-        }else{
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $from   =$baseEND->{'from'};
-            $to     =$baseEND->{'to'};
-            $data   =$baseEND->{'data'};
-            
-            $qdel="";
-            $q="";
-            foreach ($data as $key => $v) {
-                if($key>0){
-                    $q.=";";
+            $nmMember       =$baseEND->{'nmMember'};
+            $password       =$baseEND->{'password'};
+            $passwordNew    =$baseEND->{'passwordNew'};
+            if($password==$this->sess->password){
+                if(strlen($passwordNew)==0){
+                    $passwordNew=$password;
                 }
-                switch ($v->key) {
-                    case 'dinas':
-                        $qdel.="
-                            delete from dinas where taDinas='".$to."';
-                        ";
-                        $q.="
-                            INSERT INTO `dinas`(`kdDinas`, `nmDinas`, `deskripsi`, `kadis`, `nip`, `taDinas`)(
-                                SELECT `kdDinas`, `nmDinas`, `deskripsi`, `kadis`, `nip`,'".$to."' FROM `dinas` WHERE taDinas='".$from."'
-                            )
-                        ";
-                    break;
-                    case 'rekeningB':
-                        $qdel.="
-                            delete from apbd1 where taApbd1='".$to."';                        
-                            delete from apbd2 where taApbd2='".$to."';
-                            delete from apbd3 where taApbd3='".$to."';
-                            delete from apbd4 where taApbd4='".$to."';
-                            delete from apbd5 where taApbd5='".$to."';
-                            delete from apbd6 where taApbd6='".$to."';
-                        ";
-                        $q.="
-                            INSERT INTO `apbd1`(`kdApbd1`, `nmApbd1`, `deskripsi`, `taApbd1`)(
-                                SELECT `kdApbd1`, `nmApbd1`, `deskripsi`,'".$to."' FROM `apbd1` WHERE taApbd1='".$from."'
-                            );
-                            INSERT INTO `apbd2`(`kdApbd2`,`kdApbd1`, `nmApbd2`, `deskripsi`, `taApbd2`)(
-                                SELECT `kdApbd2`,`kdApbd1`, `nmApbd2`, `deskripsi`,'".$to."' FROM `apbd2` WHERE taApbd2='".$from."'
-                            );
-                            INSERT INTO `apbd3`(`kdApbd3`,`kdApbd2`, `nmApbd3`, `deskripsi`, `taApbd3`)(
-                                SELECT `kdApbd3`,`kdApbd2`, `nmApbd3`, `deskripsi`,'".$to."' FROM `apbd3` WHERE taApbd3='".$from."'
-                            );
-                            INSERT INTO `apbd4`(`kdApbd4`,`kdApbd3`, `nmApbd4`, `deskripsi`, `taApbd4`)(
-                                SELECT `kdApbd4`,`kdApbd3`, `nmApbd4`, `deskripsi`,'".$to."' FROM `apbd4` WHERE taApbd4='".$from."'
-                            );
-                            INSERT INTO `apbd5`(`kdApbd5`,`kdApbd4`, `nmApbd5`, `deskripsi`, `taApbd5`)(
-                                SELECT `kdApbd5`,`kdApbd4`, `nmApbd5`, `deskripsi`,'".$to."' FROM `apbd5` WHERE taApbd5='".$from."'
-                            );
-                            INSERT INTO `apbd6`(`kdApbd6`,`kdApbd5`, `nmApbd6`, `deskripsi`, `taApbd6`)(
-                                SELECT `kdApbd6`,`kdApbd5`, `nmApbd6`, `deskripsi`,'".$to."' FROM `apbd6` WHERE taApbd6='".$from."'
-                            );
-                        ";
-                        
-                    break;
-                    case 'subK':
-                        $qdel.="
-                            delete from purusan where taUrusan='".$to."';
-                            delete from pbidang where taBidang='".$to."';
-                            delete from pprogram where taProg='".$to."';
-                            delete from pkegiatan where taKeg='".$to."';
-                            delete from ptamsub where taSub='".$to."';
-                            delete from psub where taSub='".$to."';
-                        ";
-                        $q.="
-                            INSERT INTO `purusan`(`kdUrusan`, `nmUrusan`, `taUrusan`)(
-                                SELECT `kdUrusan`, `nmUrusan`, '".$to."' FROM `purusan` WHERE taUrusan='".$from."'
-                            );
-                            INSERT INTO `pbidang`(`kdBidang`, `kdUrusan`, `nmBidang`, `taBidang`)(
-                                SELECT `kdBidang`, `kdUrusan`, `nmBidang`,'".$to."' FROM `pbidang` WHERE taBidang='".$from."'
-                            );
-                            INSERT INTO `pprogram`(`kdProg`, `kdBidang`, `nmProg`, `taProg`)(
-                                SELECT `kdProg`, `kdBidang`, `nmProg`, '".$to."' FROM `pprogram` WHERE taProg='".$from."'
-                            );
-                            INSERT INTO `pkegiatan`(`kdKeg`, `kdProg`, `nmKeg`, `taKeg`) (
-                                SELECT `kdKeg`, `kdProg`, `nmKeg`,'".$to."' FROM `pkegiatan` WHERE taKeg='".$from."'
-                            );
-                            INSERT INTO `ptamsub`(`kdSub`, `kdKeg`, `nmSub`, `taSub`)(
-                                SELECT `kdSub`, `kdKeg`, `nmSub`,'".$to."' FROM `ptamsub` WHERE taSub='".$from."'
-                            );
-                            INSERT INTO `psub`(`kdSub`, `kdKeg`, `kdDinas`, `nmSub`, `taSub`, `qpra`, `qrka`, `qrkaFinal`, `lokasiP`, `waktuP`, `kelompokS`, `keluaran`, `hasil`, `keluaranT`, `hasilT`)(
-                                SELECT `kdSub`, `kdKeg`, `kdDinas`, `nmSub`,'".$to."', 0, 0, 0, `lokasiP`, `waktuP`, `kelompokS`, `keluaran`, `hasil`, `keluaranT`, `hasilT` FROM `psub` WHERE taSub='".$from."'
-                            );
-                        ";
-                    break;
-                    case 'ssh':
-                        $qdel.="
-                            delete from ssh where taSsh='".$to."';
-                        ";
-                        $q.="
-                            INSERT INTO `ssh`(`id`, `kodeBelanja`, `kode`, `nama`, `spesifikasi`, `spek`, `satuan`, `harga`, `idSSH`, `taSsh`)(
-                                SELECT `id`, `kodeBelanja`, `kode`, `nama`, `spesifikasi`, `spek`, `satuan`, `harga`, `idSSH`,'".$to."' FROM `ssh` WHERE taSsh='".$from."'
-                            );
-                        ";
-                    break;
-                    case 'rincianB':
-                        $qdel.="
-                            delete from ubjudul where taJudul='".$to." and tahapan=1';
-                            delete from ubrincian where taRincian='".$to."' and tahapan=1;
-                        ";
-                        $q.="
-                            INSERT INTO `ubjudul`(`kdSUb`, `kdDinas`, `kdApbd6`, `kdSDana`, `nama`, `taJudul`, `total`, `tahapan`, `dateUpdate`, `kdJudul`, `status`,`qdel`)(
-                                SELECT `kdSUb`, `kdDinas`, `kdApbd6`, `kdSDana`, `nama`, '".$to."', `total`,1  as  tahapan, `dateUpdate`, `kdJudul`, `status`,1 as qdel FROM `ubjudul` WHERE taJudul='".$from."' and tahapan=3
-                            );
-                            INSERT INTO `ubrincian`(`kdRincian`, `kdJudul`, `kdSub`, `kdDinas`, `uraian`, `total`, `jumlah1`, `jumlah2`, `jumlah3`, `satuan1`, `satuan2`, `satuan3`, `volume`, `satuanVol`, `harga`, `date`, `taRincian`, `status`, `tahapan`,`qdel`)(
-                                SELECT `kdRincian`, `kdJudul`, `kdSub`, `kdDinas`, `uraian`, `total`, `jumlah1`, `jumlah2`, `jumlah3`, `satuan1`, `satuan2`, `satuan3`, `volume`, `satuanVol`, `harga`, `date`, '".$to."', `status`,1 as  tahapan,1 as qdel FROM `ubrincian` WHERE taRincian='".$from."' and tahapan=3
-                            );
-                        ";
-                    break;
+                $q="
+                    update member set 
+                        nmMember=".$this->mbgs->_valforQuery($nmMember).",
+                        password=".$this->mbgs->_valforQuery($passwordNew)."
+                    where
+                        kdMember=".$this->mbgs->_valforQuery($this->kd)." and
+                        kdDinas=".$this->mbgs->_valforQuery($this->kdDinas)." and
+                        kdApp=".$this->mbgs->_valforQuery($this->mbgs->_getBasisData()['kd'])."
+
+                "; 
+                $check=$this->qexec->_proc($q);
+                if($check){
+                    return $this->mbgs->resTrue($this->_);
+                }else{
+                    return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
                 }
-            }
-            // return print_r($qdel.$q);
-            $check=$this->qexec->_multiProc($qdel.$q);
-            if($check){
-                $this->_['data']=$this->qexec->_func(_dinas(" where taDinas='".$this->tahun."'"));
-                return $this->mbgs->resTrue($this->_);
             }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
+                return $this->mbgs->resFalse(" Password yang anda tambahkan tidak sesuai !!!");
             }
+            
         }
     }
-
-
-    // branda
-    function insAgenda(){
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("c-sett",false));
-        // if($portal['exec']){
-        if(true){
     
+
+    public function insResponUsulan(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
             $file=$_POST['file'];
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $keterangan =$baseEND->{'keterangan'};
-            $judul      =$baseEND->{'judul'};
-
-            $kdSub      =$baseEND->{'kdSub'};
-            $nmSub      =$baseEND->{'nmSub'};
-            $tempat     =$baseEND->{'tempat'};
-            $waktu      =$baseEND->{'waktu'};
-
-            $namaFile="";
-            if(!empty($file)){
-                // return print_r($file['data']);
-                foreach ($file as $key => $v) {
-                    if($key>0){
-                        $namaFile.="/";
-                    }
-                    // $namaFile.=$this->_uploadImage($v['src'],$v['nama'])."<2G18>";
-                    $namaFile.=$this->_uploadImage($v['src'],"fs_sistem/upload/image/".$v['nama']);
-                }
-            }
-
-            // return print_r($namaFile);
-            // $split=explode("/",$namaFile);
-            // if(count($split)>1){
-            //     $q=" INSERT INTO slider (img) VALUES ";
-            //     foreach($split as $key =>$v){
-            //         $q.="('".$v."'),";  
-            //     };
-            //     $q=substr($q,0,strlen($q)-1);
-            //     // return print_r($q);
-            //     $check=$this->qexec->_multiProc($q);
-            // }else{
-            //     $check=$this->qexec->_proc("
-            //         INSERT INTO slider (img) VALUES 
-            //             (
-            //                 '".$namaFile."'
-            //             )
-            //         ");
-            // }
-            // return print_r($check);
-            $check=$this->qexec->_proc("
-                INSERT INTO agenda(kdSub, nmSub, judul, lokasi, waktu, keterangan, img, taSub) VALUES
-                (
-                    ".$this->mbgs->_valforQuery($kdSub).",".$this->mbgs->_valforQuery($nmSub).",".$this->mbgs->_valforQuery($judul).",
-                    ".$this->mbgs->_valforQuery($tempat).",".$this->mbgs->_valforQuery($waktu).",".$this->mbgs->_valforQuery($keterangan).",
-                    ".$this->mbgs->_valforQuery($namaFile).",".$this->mbgs->_valforQuery($this->tahun)."
-                )
-            ");
-            if($check){
-                $this->_['dt']     =$this->qexec->_func(_agenda(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-            }
-        }
-        return $this->mgbs->resFalse($portal['msg']);
-    }
-    function updAgenda(){
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("c-sett",false));
-        // if($portal['exec']){
-        if(true){
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            $keterangan =$baseEND->{'keterangan'};
-            $judul      =$baseEND->{'judul'};
-
-            $kdSub      =$baseEND->{'kdSub'};
-            $nmSub      =$baseEND->{'nmSub'};
-            $tempat     =$baseEND->{'tempat'};
-            $waktu      =$baseEND->{'waktu'};
-            $kdAgenda   =$baseEND->{'kdAgenda'};
-            
-
-            $check=$this->qexec->_proc("
-                update agenda set 
-                    kdSub=".$this->mbgs->_valforQuery($kdSub).", 
-                    nmSub=".$this->mbgs->_valforQuery($nmSub).", 
-                    judul=".$this->mbgs->_valforQuery($judul).", 
-                    lokasi=".$this->mbgs->_valforQuery($tempat).", 
-                    waktu=".$this->mbgs->_valforQuery($waktu).",
-                    taSub=".$this->mbgs->_valforQuery($this->tahun).",
-                    keterangan='".$keterangan."'
-                where kdAgenda=".$this->mbgs->_valforQuery($kdAgenda)."
-            ");
-            if($check){
-                $this->_['dt']     =$this->qexec->_func(_agenda(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-            }
-        }
-        return $this->mgbs->resFalse($portal['msg']);
-    }
-    function delAgenda(){
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("d-sett",false));
-        // if($portal['exec']){
-        if(true){
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            
-            $kdAgenda   =$baseEND->{'kdAgenda'};
-            $check=$this->qexec->_proc("delete from agenda where kdAgenda=".$this->mbgs->_valforQuery($kdAgenda));
-            if($check){
-                $this->_['dt']     =$this->qexec->_func(_agenda(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-            }
-        }return $this->mgbs->resFalse($portal['msg']);
-    }
-
-    function insProduk(){
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("c-sett",false));
-        // if($portal['exec']){
-        if(true){
-    
-            $file=$_POST['file'];
-            $img=$file['img'];
-            $file=$file['file'];
 
             $baseEND=json_decode((base64_decode($_POST['data'])));
-            $keterangan =$baseEND->{'keterangan'};
-            $judul      =$baseEND->{'judul'};
-
-            $namaFile="";
-            foreach ($img as $key => $v) {
-                $namaFile=$this->_uploadImage($v['src'],"fs_sistem/upload/image/".$v['nama']);
-            }
+            $id         =$baseEND->{'id'};
+            $kdKec      =$baseEND->{'kdKec'};
+            $tahun      =$baseEND->{'tahun'};
+            $uraian     =$baseEND->{'uraian'};
 
             $namaFile1='';
             foreach ($file as $key => $v) {
                 // $namaFile.=$this->_uploadImage($v['src'],$v['nama'])."<2G18>";
-                $namaFile1=$this->_uploadFiles($v['data'],"fs_sistem/upload/files/".$v['nama']);
+                $namaFile1=$this->_uploadFiles($v['data'],"".$v['nama']);
             }
         
+            $keyTabel="kdRespon";
+            $kdTabel=$this->qexec->_func("select ".$keyTabel." from mus_respon where 
+                id='".$id."'and 
+                kdKec='".$kdKec."' and 
+                tahun='".$tahun."'
+                ORDER BY cast(".$keyTabel." as int) DESC limit 1
+            ");
+            if(count($kdTabel)>0){
+                $kdTabel=$kdTabel[0][$keyTabel]+1;
+            }else{
+                $kdTabel=1;
+            }
+
             $check=$this->qexec->_proc("
-                INSERT INTO produk( judul, keterangan, file,img) VALUES
+                INSERT INTO mus_respon(kdRespon,id, kdKec, tahun, kdDinas, uraian, file) VALUES
                 (
-                    ".$this->mbgs->_valforQuery($judul).",".$this->mbgs->_valforQuery($keterangan).",
-                    ".$this->mbgs->_valforQuery($namaFile1).",".$this->mbgs->_valforQuery($namaFile)."
+                    ".$this->mbgs->_valforQuery($kdTabel).",".$this->mbgs->_valforQuery($id).",
+                    ".$this->mbgs->_valforQuery($kdKec).",".$this->mbgs->_valforQuery($tahun).",
+                    ".$this->mbgs->_valforQuery($this->kdDinas).",".$this->mbgs->_valforQuery($uraian).",
+                    ".$this->mbgs->_valforQuery($namaFile1)."
                 )
             ");
             if($check){
-                $this->_['dt']     =$this->qexec->_func(_produk(""));
+                $this->_['data']     =$this->qexec->_func(_drespon(" a.id='".$id."' and a.kdKec='".$kdKec."' and a.tahun='".$tahun."' and a.qdel=0 "));
                 return $this->mbgs->resTrue($this->_);
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
             }
         }
-        return $this->mgbs->resFalse($portal['msg']);
     }
-    function updProduk(){
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("c-sett",false));
-        // if($portal['exec']){
-        if(true){
+    public function delResponUsulan(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
             $baseEND=json_decode((base64_decode($_POST['data'])));
-            $keterangan =$baseEND->{'keterangan'};
-            $judul      =$baseEND->{'judul'};
-            $kdProduk   =$baseEND->{'kdProduk'};
+            $id         =$baseEND->{'id'};
+            $kdKec      =$baseEND->{'kdKec'};
+            $tahun      =$baseEND->{'tahun'};
             
-
-            $check=$this->qexec->_proc("
-                update produk set 
-                    judul=".$this->mbgs->_valforQuery($judul).",
-                    keterangan=".$this->mbgs->_valforQuery($keterangan)."
-                where kdProduk=".$this->mbgs->_valforQuery($kdProduk)."
-            ");
+            $q="
+                update mus_respon set qdel=1
+                where id=".$this->mbgs->_valforQuery($id)." and 
+                kdKec=".$this->mbgs->_valforQuery($kdKec)." and
+                tahun=".$this->mbgs->_valforQuery($tahun)."
+            ";
+            // return print_r($q);
+            $check=$this->qexec->_proc($q);
             if($check){
-                $this->_['dt']     =$this->qexec->_func(_produk(""));
+                $this->_['data']     =$this->qexec->_func(_drespon(" a.id='".$id."' and a.kdKec='".$kdKec."' and a.tahun='".$tahun."' and a.qdel=0 "));
                 return $this->mbgs->resTrue($this->_);
             }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
+                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
             }
         }
-        return $this->mgbs->resFalse($portal['msg']);
     }
-    function delProduk(){
-        // $portal=$this->_keamanan($_POST['code'],_getNKA("d-sett",false));
-        // if($portal['exec']){
-        if(true){
-            $baseEND=json_decode((base64_decode($_POST['data'])));
-            
-            $kdProduk   =$baseEND->{'kdProduk'};
-            $check=$this->qexec->_proc("delete from produk where kdProduk=".$this->mbgs->_valforQuery($kdProduk));
-            if($check){
-                $this->_['dt']     =$this->qexec->_func(_produk(""));
-                return $this->mbgs->resTrue($this->_);
-            }else{
-                return $this->mbgs->resFalse("Terjadi Kesalahan di penyimpanan sistem");
-            }
-        }return $this->mgbs->resFalse($portal['msg']);
-    }
-
+ 
+     
+    // batas del
     function mengertiInfo(){
         $portal=$this->_keamanan($_POST['code'],$this->mbgs->_getNKA("p-usul"));
         if($portal['exec']){
@@ -813,6 +344,28 @@ class Proses extends CI_Controller {
                     kdFitur like '%".explode("/",$kodePage)[0]."%';";
         }
         return $q;
+    }
+    function exampleUpload(){
+        // $file=$_POST['file'];
+        // $img=$file['img'];
+        // $file=$file['file'];
+
+        // $baseEND=json_decode((base64_decode($_POST['data'])));
+        // $keterangan =$baseEND->{'keterangan'};
+        // $judul      =$baseEND->{'judul'};
+        // $kdKate     =$baseEND->{'kdKate'};
+        // $sumber     =$baseEND->{'sumberKate'};
+
+        // $namaFile="";
+        // foreach ($img as $key => $v) {
+        //     $namaFile=$this->_uploadImage($v['src'],"fs_sistem/upload/image/".$v['nama']);
+        // }
+
+        // $namaFile1='';
+        // foreach ($file as $key => $v) {
+        //     // $namaFile.=$this->_uploadImage($v['src'],$v['nama'])."<2G18>";
+        //     $namaFile1=$this->_uploadFiles($v['data'],"".$v['nama']);
+        // }
     }
     public function _uploadFiles($file,$nama){
         $pdf_decoded = base64_decode($file,true);

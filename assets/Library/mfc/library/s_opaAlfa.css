@@ -1,0 +1,44 @@
+.bbOpa1{
+    background-color: rgba(10, 10, 10, 0.1) !important;
+  }
+  .bbOpa2{
+    background-color: rgba(10, 10, 10, 0.2) !important;
+  }
+  .bbOpa4{
+    background-color: rgba(10, 10, 10, 0.4) !important;
+  }
+  .bbOpa6{
+    background-color: rgba(10, 10, 10, 0.6) !important;
+  }
+  .bbOpa8{
+    background-color: rgba(10, 10, 10, 0.8) !important;
+  }
+  .bwOpa1{
+    background-color: rgba(255, 255, 255, 0.1) !important;
+  }
+  .bwOpa2{
+    background-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  .bwOpa4{
+    background-color: rgba(255, 255, 255, 0.4) !important;
+  }
+  .bwOpa6{
+    background-color: rgba(255, 255, 255, 0.6) !important;
+  }
+  .bwOpa8{
+    background-color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  
+  .exBgColorBlack20{
+    background-color: rgba(10, 10, 10, 0.2);
+  }
+  .exBgColorBlack40{
+    background-color: rgba(10, 10, 10, 0.4);
+  }
+  .exBgColorBlack60{
+    background-color: rgba(10, 10, 10, 0.6);
+  }
+  .exBgColorBlack80{
+    background-color: rgba(10, 10, 10, 0.8);
+  }

@@ -49,6 +49,20 @@ async function _postNoLoad(url,data){
     })
 }
 async function _postFile(url,data,img){
+    // file={
+    //     file:_file.data,
+    //     img :img.data,
+    // }
+    
+    // _postFile('proses/insProduk',param,file).then(res=>{
+    //     res=JSON.parse(res);
+    //     if(res.exec){
+    //         _modalHide('modal');
+    //         _respon(res.data);
+    //     }else{
+    //         return _toast({bg:'e', msg:res.msg});
+    //     }
+    // });
     if(img.length==0){
         img="";
     }
@@ -936,4 +950,7 @@ function _startEditorTiny(v) {
             image_advtab: true,        
         });
     })
+}
+function _addHead(value){
+    $('#head').html($('#head').html()+value);
 }

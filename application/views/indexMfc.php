@@ -3,17 +3,17 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Header</title>
+    <title><?php echo ($this->_['nm']) ?></title>
+    <link href='<?php echo(base_url()."assets/fs_css/logo/".$this->_['logo']) ?>' rel='icon'>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     
     <link rel='stylesheet' type='text/css'  href='<?php echo base_url();?>assets/Library/mfc/library/import.css'>
-    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
     <div id="fileMfc"></div>
     <div id='head'></div>
     <script src='<?php echo base_url();?>assets/fs_componen/bower_components/bootstrap/dist/js/jquery.js'></script>
     <script src='<?php echo base_url();?>assets/Library/mfc/library/LibMfc.js'></script>
     <script>
-      const startmfc=new LibMFC();
+      const startmfc=new LibMFC('<?php echo base_url();?>');
       startmfc.startMfc();
       document.write(startmfc.declarationMfc);
     </script>
@@ -21,7 +21,9 @@
 <body>
   <main>
   </main>
+  <footer></footer>
   <div id="footer"></div>
+
   <script>
         var router   =<?php echo json_encode(base_url())?>,
             _page    =<?php echo json_encode($page)?>,
@@ -30,7 +32,6 @@
             myCode  =<?php echo json_encode($code) ?>,
             assert  =<?php echo json_encode($assert)?>,
             qlogin  =<?php echo json_encode($qlogin)?>;
-
         if(qlogin){
             var _nama    ='<?php echo $this->sess->nmMember;?>',
                 _kdJabatan='<?php echo $this->sess->kdJabatan?>';
@@ -67,6 +68,7 @@
             });
         })
     </script>
+
 </body>
 </html>
 

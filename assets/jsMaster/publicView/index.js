@@ -2,6 +2,7 @@ function _onload(data){
     myCode=data.code;
     _.dt=[];
     _.dinas=data.dinas;
+    _.tahun=data.tahun;
 
     const main=document.querySelector("main");
 
@@ -26,7 +27,7 @@ function _onload(data){
     });
     viewWebsite=header_.ex3({
         clsContainer:"container-fluid p-0 m-0 bgCAbs8",
-        clsHeader:"nav-pills d-flex p-3 bwOpa4 shadow" ,
+        clsHeader:"nav-pills d-flex p-3 bwOpa6 shadow" ,
         // tukar:"Bagus H",
         htmlJudul:`
           <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
@@ -38,12 +39,12 @@ function _onload(data){
             clsRow:" container-fluid",
             col:[
                 {
-                    cls:"-10",
+                    cls:"-9",
                     html:''
                 },{
-                    cls:"-2",
+                    cls:"-3 text-end",
                     html:button_.ex1({
-                          clsGroup:"",
+                          clsGroup:"float-right",
                           listBtn :[
                             {
                               text:`<span class="mdi mdi-web text-light mdi-spin"></span>`,
@@ -53,7 +54,11 @@ function _onload(data){
                               text:"E-MUSRENBANG",
                               cls:" btn-sm btn-info ",
                               attr:""
-                            }
+                            },{
+                                text:"Th. "+_.tahun,
+                                cls:" btn-sm btn-success ",
+                                attr:""
+                              }
                           ],
                         })
                 }
@@ -68,7 +73,7 @@ function _onload(data){
 
     header_.hmenu=[];
     header_.hmenu.push({
-        htmlLi:`<a href="#" class="nav-link text-warning p-1 text-center">
+        htmlLi:`<a href="#" onclick="_login(1)" class="nav-link text-warning p-1 text-center">
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         PRA MUSRENBANG <br>
@@ -79,7 +84,7 @@ function _onload(data){
     });
 
     header_.hmenu.push({
-        htmlLi:`<a href="#" class="nav-link text-primary p-1 text-center">
+        htmlLi:`<a href="#" onclick="_login(2)" class="nav-link text-primary p-1 text-center">
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         MUSRENBANG KECAMATAN <br>
@@ -89,7 +94,7 @@ function _onload(data){
                 <hr>`
     });
     header_.hmenu.push({
-        htmlLi:`<a href="#" class="nav-link text-info p-1 text-center">
+        htmlLi:`<a href="#" onclick="_login(3)" class="nav-link text-info p-1 text-center">
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         FORUM OPD <br>
@@ -99,7 +104,7 @@ function _onload(data){
                 <hr>`
     });
     header_.hmenu.push({
-        htmlLi:`<a href="#" class="nav-link text-success p-1 text-center">
+        htmlLi:`<a href="#" onclick="_login(4)" class="nav-link text-success p-1 text-center">
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         MUSRENBANG KABUPATEN<br>
@@ -113,9 +118,6 @@ function _onload(data){
         clsUl:" d-flex flex-column p-2",
         clsLi:""
     })
-
-
-    // <a href="#" class="link-dark d-block text-decoration-none rounded">terakomodir</a
 
     viewWebsite+=style_.rowCol({
         clsRow:" container-fluid",
@@ -131,21 +133,17 @@ function _onload(data){
     })
 
     main.innerHTML=viewWebsite;
-    // 
-    // const startmfc=new LibMFC();
-    // startmfc.startMfc();
-    // document.write(startmfc.declarationMfc);
-
-    // $('#body').html(data.tmBody);
-    // myCode=data.code;
-    // _.dt=[];
-    // _.dinas=data.dinas;
-    // viewWebsite=_chartTahapan()
-                // +_tabelKecamatan();
-    // $('#bodyTM').html(viewWebsite);
-    $('#footer').html(data.footer);
-
-    // _startTabel("dt");
+    const footer=document.querySelector("footer");
+    footer.innerHTML=`
+        <div class="container-fluid bg-info text-light p-1 text-center">
+            <p>BAPPEDA©2022,Kabupaten Sumbawa Barat</p>
+        </div>
+    `+modal_.ex1({
+        cls:"modal-dialog-centered modal-dialog-scrollable",
+        clsHeader:"",
+        clsBody:"",
+    });
+    $('#footer').html(data.footer+startmfc.endBootstrapHTML(2));
 }
 function _chartTahapan() {
     return _formNoHeader({
@@ -175,17 +173,17 @@ function _tabelKecamatan() {
         text:"Data Musrenbang",
         classJudul:'',
         btn:_btn({
-            color:"primary shadow",
+            color:"success",
             judul:"Donwload OPD",
             attr:"style='padding:5px;font-size:15px;' onclick='addData()'",
             // class:"btn btn-success btn-block"
         }),
-        bgHeader:'bg-info mt-3',
+        bgHeader:'bg-primary text-light mt-3',
         isi:`<div id='tabelShow' class="card">` // k kemaren
                 +setTabel()
             +`</div>`,
         id:"form1",
-        sizeCol:'12',
+        sizeCol:'12 shadow',
     })
 }
 function setTabel(){
@@ -231,26 +229,19 @@ function setTabel(){
         });;
 }
 function _login(key) {
-    _modalEx1({
-        judul:"Form Login",
-        icon:`<i class="mdi mdi-note-plus"></i>`,
-        cform:`text-light`,
-        bg:"bg-light",
-        minWidth:"500px; ;",
-        isi:_flogin(),
-        footer:_btn({
-                    color:"primary shadow",
-                    judul:"Close",
-                    attr:`style='float:right; padding:5px;;' onclick="_modalHide('modal')"`,
-                    class:"btn btn-secondary"
-                })
-                +_btn({
-                    color:"primary shadow",
-                    judul:"Login",
-                    attr:"style='float:right; padding:5px;;' onclick='_logined("+key+")'",
-                    class:"btn btn-primary"
-                })
-    });
+    modal_.setMo({
+        ex:1,
+        header:`<h1 class="modal-title fs-5" id="staticBackdropLiveLabel">${"Form Login".toUpperCase()}</h1>`,
+        body:_flogin(),
+        footer:modal_.btnClose("btn-secondary")
+            +_btn({
+                color:"primary shadow",
+                judul:"Login",
+                attr:"style='float:right; padding:5px;;' onclick='_logined("+key+")'",
+                class:"btn btn-primary"
+            })
+    })
+    $('#modalEx1').modal("show");
 }
 function _logined(key) {
     param={

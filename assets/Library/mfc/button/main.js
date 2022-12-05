@@ -37,11 +37,11 @@ class Button_ extends LibMfcHtml{
       //   cls:" btn-sm btn-primary",
       //   attr:""
       // }
-      return `<button type="button" class="btn ${v.cls}" ${this.delUndife(v.cls)}>${this.delUndife(v.text)}</button>`;
+      return `<button type="button" class="btn ${v.cls}" ${this.delUndife(v.attr)}>${this.delUndife(v.text)}</button>`;
     }
     ex3=(v)=>{ //Popover 
       // posisi : top right bottom left
-      return ` <button type="button" class="btn ${v.cls}" 
+      return ` <button type="button" class="btn ${v.cls}"  ${v.attr}
                   data-bs-container="body" 
                   data-bs-toggle="popover" 
                   data-bs-placement="${v.posisi}" 

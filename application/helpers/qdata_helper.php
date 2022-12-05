@@ -20,7 +20,7 @@
                 when perubahan=0 then status
                 else concat(status," ke- ", perubahan)
             end as keterangan
-         FROM tahun order by cast(nama as int) desc';
+         FROM tahun '.$where.' order by cast(nama as int) desc';
     }
     function _cbTahun($where){
         return 'SELECT *,
@@ -49,143 +49,347 @@
     function _cbPrio($where){
         return "select id as value, nama as valueName from prioritas ".$where;
     }
-    function _dtTamSub($where){
-        return "select * from ptamsub ".$where;
+    function _dtsubMusrenbang($kdkec,$tahapan,$where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            select 
+                b.nmSub,a.kdSub,a.kdDinas,c.nmDinas,
+                (
+                    select concat(count(id),' usulan') from musrembang 
+                    where kdSub=a.kdSub and kdkec='".$kdkec."'  and 
+                    prioritas=a.idPri and kdDinas=a.kdDinas and tahapan='".$tahapan."' and tahun=a.tahun
+                ) as tusulan
+            from musrembangview a 
+            join psub b on 
+                a.kdSub=b.kdSub and
+                a.kdDinas=b.kdDinas
+            join dinas c on
+                b.kdDinas=c.kdDinas
+            ".$qwhere."
+            GROUP BY a.kdSub,a.kdDinas";
     }
+    function _dsub($where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            select 
+                kdSub,nmSub
+            from psub
+            ".$qwhere;
+    }
+    function _cbDesa($where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            select 
+                nama as value, nama as valueName
+            from desa
+            ".$qwhere;
+    }
+    function _dmusrenbang($where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            select 
+                *
+            from musrembang
+            ".$qwhere;
+    }
+    function _drespon($where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            SELECT a.*,b.nmDinas
+            FROM mus_respon a
+            join dinas b on 
+                a.kdDinas=b.kdDinas and
+                a.tahun=b.taDinas
+            ".$qwhere;
+    }
+
+    // terkait keamanan
     function _getNKA($obj,$all){ //nama key Action crud-???
         $nmKeyTabel=array();
         $no=2;
 
-        // $dev=[5];
-        $super=[3];
-        $admin=[2,3];
-        $user=[1,2,3]; //no tingkat jabatan
+        $dev=[4];
+        $super=[3,4];
+        $admin=[2,3,4];
+        $user=[1,2,3,4]; //no tingkat jabatan
         $unik="MFC2G18-";
-        $nm="E Master";     //login sistem
+        $nm="E MUSRENBANG";     //login sistem
         $nmKeyTabel['l-'.$nm]=array(  
-            'kd'=>$unik.$no."/1",
+            'kd'=>$unik.$no,
             'nm'=>($nm."-"),
             'kdJabatan'=>$user,
             'page'=>'Login Sistem '.$nm
         );
         
-        $no+=1;
-        $nm="jaba";     //dashboard sistem
-        $nmPage="Jabatan"; 
+        $no+=1; 
+        $nm="tahu";     //dashboard sistem
+        $nmPage="Tahun"; 
         $nmKeyTabel['p-'.$nm]=array( 
-            'kd'=>$unik.$no."/1",
+            'kd'=>$unik.$no,
             'nm'=>($nm."-"),
             'kdJabatan'=>$user, //no tingkat jabatan
             'page'=>'page '.$nmPage
         );
-        $nmKeyTabel['c-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$admin,
-            'page'=>'Perbarui Data '.$nmPage
-        );
-        $nmKeyTabel['u-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$admin,
-            'page'=>'Perbarui Data '.$nmPage
-        );
-        $nmKeyTabel['d-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$admin,
-            'page'=>'Perbarui Data '.$nmPage
-        );
 
         $no+=1;
-        $nm="memb";//inp 
-        $nmPage="Member"; 
+        $nm="usu1";//inp 
+        $nmPage="usulan tahapan 1"; 
         $nmKeyTabel['p-'.$nm]=array( 
-            'kd'=>$unik.$no."/1",
+            'kd'=>$unik.$no,
             'nm'=>($nm."-"),
             'kdJabatan'=>$user, //no tingkat jabatan
             'page'=>'Page '.$nmPage
         );
         $nmKeyTabel['c-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
+            'kd'=>$unik.$no."/1",
             'nm'=>($nm."-"),
             'kdJabatan'=>$user,
-            'page'=>'Page PRA RKA'.$nmPage
+            'page'=>'insert '.$nmPage
         );
         //update
         $nmKeyTabel['u-'.$nm]=array( 
-            'kd'=>$unik.$no."/3",
-            'kdJabatan'=>$admin,
+            'kd'=>$unik.$no."/2",
+            'kdJabatan'=>$user,
             'nm'=>($nm."-"),
-            'page'=>'Page RKA '.$nmPage
+            'page'=>'update '.$nmPage
         ); 
         //Delete
         $nmKeyTabel['d-'.$nm]=array(
-            'kd'=>$unik.$no."/4",
-            'kdJabatan'=>$admin,
+            'kd'=>$unik.$no."/3",
+            'kdJabatan'=>$user,
             'nm'=>($nm."-"),
-            'page'=>'Page Final RKA '.$nmPage
+            'page'=>'delete '.$nmPage
         ); 
+        // export to tahapan 2
+        $nmKeyTabel['e-'.$nm]=array(
+            'kd'=>$unik.$no."/4",
+            'kdJabatan'=>$user,
+            'nm'=>($nm."-"),
+            'page'=>'export tahapan 2 musrenbang kec'.$nmPage
+        ); 
+        // memberikan ijin komentar respon opd
+        $nmKeyTabel['r-'.$nm]=array(
+            'kd'=>$unik.$no."/5",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'respon '.$nmPage
+        );
+        // pemberi keputusan status usulan
+        $nmKeyTabel['k-'.$nm]=array(
+            'kd'=>$unik.$no."/6",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'keputusan '.$nmPage
+        );
 
 
-        $no+=1;
-        $nm="dina";//inp 
-        $nmPage="Dinas"; 
+        $no+=1; // 5
+        $nm="usu2";//inp 
+        $nmPage="usulan tahapan 2"; 
         $nmKeyTabel['p-'.$nm]=array( 
-            'kd'=>$unik.$no."/1",
+            'kd'=>$unik.$no,
             'nm'=>($nm."-"),
             'kdJabatan'=>$user, //no tingkat jabatan
             'page'=>'Page '.$nmPage
         );
         $nmKeyTabel['c-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$user,
-            'page'=>'All Action '.$nmPage
-        );
-        $nmKeyTabel['u-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$user,
-            'page'=>'All Action '.$nmPage
-        );
-        $nmKeyTabel['d-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$user,
-            'page'=>'All Action '.$nmPage
-        );
-
-        $no+=1;
-        $nm="agdi";//inp 
-        $nmPage="Admin Group Dinas "; 
-        $nmKeyTabel['p-'.$nm]=array( 
             'kd'=>$unik.$no."/1",
             'nm'=>($nm."-"),
-            'kdJabatan'=>$user, //no tingkat jabatan
-            'page'=>'Page '.$nmPage
-        );
-        $nmKeyTabel['c-'.$nm]=array( 
-            'kd'=>$unik.$no."/2",
-            'nm'=>($nm."-"),
-            'kdJabatan'=>$admin,
-            'page'=>'OPD '.$nmPage
+            'kdJabatan'=>$dev,
+            'page'=>'insert'.$nmPage
         );
         //update
         $nmKeyTabel['u-'.$nm]=array( 
-            'kd'=>$unik.$no."/3",
-            'kdJabatan'=>$user,
+            'kd'=>$unik.$no."/2",
+            'kdJabatan'=>$super, // untuk pergantian pagu anggaran oleh opd
             'nm'=>($nm."-"),
-            'page'=>'Belanja '.$nmPage
+            'page'=>'update '.$nmPage
         ); 
+        //Delete
+        $nmKeyTabel['d-'.$nm]=array(
+            'kd'=>$unik.$no."/3",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'Delete '.$nmPage
+        ); 
+        // export to tahapan 3
+        $nmKeyTabel['e-'.$nm]=array(
+            'kd'=>$unik.$no."/4",
+            'kdJabatan'=>$super,
+            'nm'=>($nm."-"),
+            'page'=>'export tahapan 3  forum OPD'.$nmPage
+        );
+        // memberikan ijin komentar respon opd
+        $nmKeyTabel['r-'.$nm]=array(
+            'kd'=>$unik.$no."/5",
+            'kdJabatan'=>$admin,
+            'nm'=>($nm."-"),
+            'page'=>'respon '.$nmPage
+        );
+        // pemberi keputusan status usulan
+        $nmKeyTabel['k-'.$nm]=array(
+            'kd'=>$unik.$no."/6",
+            'kdJabatan'=>$super,
+            'nm'=>($nm."-"),
+            'page'=>'keputusan '.$nmPage
+        );
+
+        $no+=1;
+        $nm="usu3";//inp 
+        $nmPage="usulan tahapan 3"; 
+        $nmKeyTabel['p-'.$nm]=array( 
+            'kd'=>$unik.$no,
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$user, //no tingkat jabatan
+            'page'=>'Page '.$nmPage
+        );
+        $nmKeyTabel['c-'.$nm]=array( 
+            'kd'=>$unik.$no."/1",
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$dev,
+            'page'=>'insert'.$nmPage
+        );
+        //update
+        $nmKeyTabel['u-'.$nm]=array( 
+            'kd'=>$unik.$no."/2",
+            'kdJabatan'=>$super, // untuk pergantian pagu anggaran oleh opd
+            'nm'=>($nm."-"),
+            'page'=>'update '.$nmPage
+        ); 
+        //Delete
+        $nmKeyTabel['d-'.$nm]=array(
+            'kd'=>$unik.$no."/3",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'Delete '.$nmPage
+        ); 
+        // export to tahapan 3
+        $nmKeyTabel['e-'.$nm]=array(
+            'kd'=>$unik.$no."/4",
+            'kdJabatan'=>$super,
+            'nm'=>($nm."-"),
+            'page'=>'export tahapan 4  Musrenbang KAB'.$nmPage
+        );
+        // memberikan ijin komentar respon opd
+        $nmKeyTabel['r-'.$nm]=array(
+            'kd'=>$unik.$no."/5",
+            'kdJabatan'=>$admin,
+            'nm'=>($nm."-"),
+            'page'=>'respon '.$nmPage
+        );
+        // pemberi keputusan status usulan
+        $nmKeyTabel['k-'.$nm]=array(
+            'kd'=>$unik.$no."/6",
+            'kdJabatan'=>$super,
+            'nm'=>($nm."-"),
+            'page'=>'keputusan '.$nmPage
+        );
+        
+
+        $no+=1; //7
+        $nm="usu4";//inp 
+        $nmPage="usulan tahapan 4"; 
+        $nmKeyTabel['p-'.$nm]=array( 
+            'kd'=>$unik.$no,
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$user, //no tingkat jabatan
+            'page'=>'Page '.$nmPage
+        );
+        $nmKeyTabel['c-'.$nm]=array( 
+            'kd'=>$unik.$no."/1",
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$dev,
+            'page'=>'insert'.$nmPage
+        );
+        //update
+        $nmKeyTabel['u-'.$nm]=array( 
+            'kd'=>$unik.$no."/2",
+            'kdJabatan'=>$dev, // untuk pergantian pagu anggaran oleh opd
+            'nm'=>($nm."-"),
+            'page'=>'update '.$nmPage
+        ); 
+        //Delete
+        $nmKeyTabel['d-'.$nm]=array(
+            'kd'=>$unik.$no."/3",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'Delete '.$nmPage
+        ); 
+        // export to tahapan 3
+        $nmKeyTabel['e-'.$nm]=array(
+            'kd'=>$unik.$no."/4",
+            'kdJabatan'=>$super,
+            'nm'=>($nm."-"),
+            'page'=>'export tahapan 4  Musrenbang KAB'.$nmPage
+        );
+        // memberikan ijin komentar respon opd
+        $nmKeyTabel['r-'.$nm]=array(
+            'kd'=>$unik.$no."/5",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'respon '.$nmPage
+        );
+        // pemberi keputusan status usulan
+        $nmKeyTabel['k-'.$nm]=array(
+            'kd'=>$unik.$no."/6",
+            'kdJabatan'=>$dev,
+            'nm'=>($nm."-"),
+            'page'=>'keputusan '.$nmPage
+        );
+
+
+        $no+=1;
+        $nm="sett";//inp 
+        $nmPage="pengaturan"; 
+        $nmKeyTabel['p-'.$nm]=array( 
+            'kd'=>$unik.$no,
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$user, //no tingkat jabatan
+            'page'=>'Page '.$nmPage
+        );
+        $nmKeyTabel['u-'.$nm]=array( 
+            'kd'=>$unik.$no."/1",
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$user,
+            'page'=>'update'.$nmPage
+        );
+
+        $no+=1;
+        $nm="resp";//inp 
+        $nmPage="respon usulan"; 
+        $nmKeyTabel['p-'.$nm]=array( 
+            'kd'=>$unik.$no,
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$user, //no tingkat jabatan
+            'page'=>'Page '.$nmPage
+        );
+        $nmKeyTabel['c-'.$nm]=array( 
+            'kd'=>$unik.$no."/1",
+            'nm'=>($nm."-"),
+            'kdJabatan'=>$user,
+            'page'=>'create'.$nmPage
+        );
         $nmKeyTabel['d-'.$nm]=array( 
-            'kd'=>$unik.$no."/3",
-            'kdJabatan'=>$user,
+            'kd'=>$unik.$no."/2",
             'nm'=>($nm."-"),
-            'page'=>'Belanja '.$nmPage
-        ); 
-
-
+            'kdJabatan'=>$user,
+            'page'=>'delete'.$nmPage
+        );
 
         if($all){
             return $nmKeyTabel;
@@ -193,5 +397,21 @@
             return $nmKeyTabel[$obj]['kd'];
         }
         
+    }
+    function _cekKey($kodeForm,$kodeMember,$tahun,$kdApp){
+        return "SELECT 
+            * 
+        FROM member a 
+        JOIN appKey b on
+            a.kdMember1 =b.kdMember  
+        WHERE b.kdFitur='".$kodeForm."' AND b.kdMember='".$kodeMember."' AND b.kunci=0 and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
+    }
+    function _groupKey($kodeForm,$kodeMember,$tahun,$kdApp){
+        return "SELECT 
+            kdFitur,kunci
+        FROM member a 
+        JOIN appKey b on
+            a.kdMember1 =b.kdMember  
+        WHERE b.kdFitur like '%".$kodeForm."%' AND b.kdMember='".$kodeMember."' and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
     }
 ?>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <div class="d-flex flex-nowrap">
+      <script>
+        
+        header_.hmenu=[];
+        header_.hmenu.push({htmlLi:`
+          <a href="#" class="nav-link active" aria-current="page">
+            <span class="mdi mdi-car-emergency mdi-18px"></span>
+            Home
+          </a>
+        `});
+        header_.hmenu.push({htmlLi:`
+          <a href="#" class="nav-link ">
+            <span class="mdi mdi-car-emergency mdi-18px"></span>  
+            Dashboard
+          </a>
+        `});
+        header_.hmenu.push({
+          htmlLi:`
+          <a href="#" class="nav-link ">
+            <span class="mdi mdi-car-emergency mdi-18px"></span>
+            Orders
+          </a>
+          `,
+          subMenu:[
+            {htmlLi:`<li><a class="dropdown-item" href="#">Action</a></li>`},
+            {htmlLi:`<li><a class="dropdown-item" href="#">Action</a></li>`},
+            {htmlLi:`<li><a class="dropdown-item" href="#">Action</a></li>`}
+          ]
+        });
+        
+        document.write(
+          sidebar_.ex1({
+            cls:'d-flex flex-column flex-shrink-0 p-3 text-bg-dark',
+            style:'width: 280px;',
+            htmlJudul:`
+              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+                <span class="fs-4">Sidebar</span>
+              </a>
+              <hr>
+              `,
+            htmlNav:header_.nav3({
+                  clsUl:" flex-column mb-auto",
+                  clsLi:""
+                }),
+            footer:`
+              <hr>
+              <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                  <strong>mdo</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                  <li><a class="dropdown-item" href="#">New project...</a></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </div>`
+          })
+
+          //ke dua
+          +sidebar_.ex1({
+            cls:'d-flex flex-column flex-shrink-0 p-3 bg-light',
+            style:'width: 280px;',
+            htmlJudul:`
+              <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-decoration-none">
+                <svg class="bi pe-none me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+                <span class="fs-4">Sidebar</span>
+              </a>
+              <hr>
+              `,
+            htmlNav:header_.nav3({
+                  clsUl:" flex-column mb-auto",
+                  clsLi:""
+                }),
+            footer:`
+              <hr>
+              <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                  <strong>mdo</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                  <li><a class="dropdown-item" href="#">New project...</a></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </div>`
+          })
+        );
+
+        header_.hmenu=[];
+        header_.hmenu.push({htmlLi:`
+          <a href="#" class="nav-link active py-3 border-bottom rounded-0" aria-current="page" title="Home" data-bs-toggle="tooltip" data-bs-placement="right">
+            <span class="mdi mdi-car-emergency mdi-18px"></span>
+          </a>
+        `});
+        header_.hmenu.push({htmlLi:`
+          <a href="#" class="nav-link py-3 border-bottom rounded-0" title="Dashboard" data-bs-toggle="tooltip" data-bs-placement="right">
+            <span class="mdi mdi-car-emergency mdi-18px"></span>
+          </a>
+        `});
+        
+        document.write(
+          sidebar_.ex1({
+            cls:'d-flex flex-column flex-shrink-0 bg-light',
+            style:'width: 4.5rem;',
+            htmlJudul:`
+            <a href="/" class="d-block p-3 link-dark text-decoration-none" title="Icon-only" data-bs-toggle="tooltip" data-bs-placement="right">
+              <span class="mdi mdi-car-emergency mdi-18px"></span>
+              <span class="visually-hidden">Icon-only</span>
+            </a>
+              `,
+            htmlNav:header_.nav3({
+                  clsUl:" nav-flush flex-column mb-auto text-center",
+                  clsLi:""
+                }),
+            footer:`
+              <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                  <strong>mdo</strong>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                  <li><a class="dropdown-item" href="#">New project...</a></li>
+                  <li><a class="dropdown-item" href="#">Settings</a></li>
+                  <li><a class="dropdown-item" href="#">Profile</a></li>
+                  <li><hr class="dropdown-divider"></li>
+                  <li><a class="dropdown-item" href="#">Sign out</a></li>
+                </ul>
+              </div>`
+          })
+        );
+      </script>
+      </div>
+  </main>
+  <script>
+    header_.endBootstrap(2);
+  </script>
+</body>
+</html>

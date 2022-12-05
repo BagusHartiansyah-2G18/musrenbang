@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+
+</head>
+<body>
+  <main>
+    <script>
+      document.write(teditor_.lib('../library/',true));
+    </script>
+    <script>
+      // view 3
+      // document.write(header_.divider());
+      document.write(
+        teditor_.ex1({
+          cls:'',
+          id:'isi',
+          value:'Bagus H',
+          clsArea:''
+        })
+      )
+    </script>
+  </main>
+  
+  <script>
+    document.write(teditor_.lib('../library/',false));
+    jQuery(document).ready(function() {
+            wizardEl = KTUtil.get('kt_wizard_v3');
+            formEl = $('#kt_form');
+            tinymce.init({
+                mode : "textareas",
+                //menubar : false,
+                forced_root_block : false,
+                force_br_newlines : true,
+                force_p_newlines : false,
+                height: 500,
+                plugins: [
+                    "advlist autolink lists link image charmap print preview hr anchor pagebreak",
+                    "searchreplace wordcount visualblocks visualchars code fullscreen",
+                    "insertdatetime nonbreaking save table directionality",
+                    "emoticons template paste  textpattern responsivefilemanager"
+                ],
+                toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image responsivefilemanager",
+
+                external_filemanager_path: base_url + "/assets/",
+                filemanager_title:"Responsive Filemanager" ,
+                external_plugins: { "filemanager" : base_url + "/filemanager/plugin.min.js"},
+                image_advtab: true,        
+            });
+        })
+
+        var site_url = 'http://localhost:8080/';
+        var base_url = 'http://localhost:8080/';
+
+        var KTAppOptions = {
+            "colors": {
+                "state": {
+                    "brand": "#5d78ff",
+                    "dark": "#282a3c",
+                    "light": "#ffffff",
+                    "primary": "#5867dd",
+                    "success": "#34bfa3",
+                    "info": "#36a3f7",
+                    "warning": "#ffb822",
+                    "danger": "#fd3995"
+                },
+                "base": {
+                    "label": [
+                        "#c5cbe3",
+                        "#a1a8c3",
+                        "#3d4465",
+                        "#3e4466"
+                    ],
+                    "shape": [
+                        "#f0f3ff",
+                        "#d9dffa",
+                        "#afb4d4",
+                        "#646c9a"
+                    ]
+                }
+            }
+        };
+  </script>
+  
+</body>
+</html>

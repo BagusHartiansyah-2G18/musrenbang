@@ -39,11 +39,15 @@
 @import "./bootstrap-5.2.2/bootstrap-5.2.2/dist/css/bootstrap.rtl.min.css.map"; */
 
 @import "./MaterialDesignIcons6/css/materialdesignicons.min.css";
+@import "./s_bg.css";
+@import "./s_opaAlfa.css";
+@import "./s_widHig.css";
 
+@import "../../../fs_componen/plugins/toastr/toastr.css";
+@import "../../../fs_componen/plugins/sweetalert2/sweetalert2.min.css"; 
 
-body {
-    padding-bottom: 20px;
-    /* background-color: aqua; */
+body{
+  font-family: "Sans-serif","Verdana","Helvetica"
 }
 
 .navbar {
@@ -103,130 +107,9 @@ body {
 .judulFunc{
     text-transform: uppercase;
 }
-.exBgImgC{
-  background-image: url('./file/clouds-2725520_960_720.jpg');
-  background-size: cover;
-}
-.exBgImgC100{
-  background-image: url('./file/clouds-2725520_960_720.jpg');
-  background-size: cover;
-  min-height: 100px;
-}
-.exBgImgC250{
-  background-image: url('./file/clouds-2725520_960_720.jpg');
-  background-size: cover;
-  min-height: 250px;
-}
-
-.bgC1{
-  background-image: url('./file/bg-c1.jpg');
-  background-size: cover;
-}
-.bgC2{
-  background-image: url('./file/bg-c2.jpg');
-  background-size: cover;
-}
-.bgC3{
-  background-image: url('./file/bg-c3.jpg');
-  background-size: cover;
-}
-.bgC4{
-  background-image: url('./file/bg-c4.jpg');
-  background-size: cover;
-}
-.bgC5{
-  background-image: url('./file/bg-c5.jpg');
-  background-size: cover;
-}
-.bgC6{
-  background-image: url('./file/bg-c6.jpg');
-  background-size: cover;
-}
 
 
-.bgCAbs7{
-  background-image: url('./file/bg-abs7.jpg');
-  background-size: cover;
-}
-.bgCAbs8{
-  background-image: url('./file/bg-abs8.jpg');
-  background-size: cover;
-}
-.bgCAbs15{
-  background-image: url('./file/bg-abs15.jpg');
-  background-size: cover;
-}
-.bgCAbs17{
-  background-image: url('./file/bg-abs17.jpg');
-  background-size: cover;
-}
 
-.mhight20{
-  min-height: 20px;
-}
-.mhight30{
-  min-height: 30px;
-}
-.mhight50{
-  min-height: 50px;
-}
-.mhight100{
-  min-height: 100px;
-}
-.mhight250{
-  min-height: 250px;
-}
-
-.mhightFull{
-  min-height: 100%;
-}
-
-.bbOpa1{
-  background-color: rgba(10, 10, 10, 0.1);
-}
-.bbOpa2{
-  background-color: rgba(10, 10, 10, 0.2);
-}
-.bbOpa4{
-  background-color: rgba(10, 10, 10, 0.4);
-}
-.bbOpa6{
-  background-color: rgba(10, 10, 10, 0.6);
-}
-.bbOpa8{
-  background-color: rgba(10, 10, 10, 0.8);
-}
-.bwOpa1{
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.bwOpa2{
-  background-color: rgba(255, 255, 255, 0.2);
-}
-.bwOpa4{
-  background-color: rgba(255, 255, 255, 0.4);
-}
-.bwOpa6{
-  background-color: rgba(255, 255, 255, 0.6);
-}
-.bwOpa8{
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-.bbOpa10{
-  background-color: rgba(10, 10, 10, 0.1);
-}
-.exBgColorBlack20{
-  background-color: rgba(10, 10, 10, 0.2);
-}
-.exBgColorBlack40{
-  background-color: rgba(10, 10, 10, 0.4);
-}
-.exBgColorBlack60{
-  background-color: rgba(10, 10, 10, 0.6);
-}
-.exBgColorBlack80{
-  background-color: rgba(10, 10, 10, 0.8);
-}
 
 .pcard3{
   padding:0px 12px 0px 0px !important;

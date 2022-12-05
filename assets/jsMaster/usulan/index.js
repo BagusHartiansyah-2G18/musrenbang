@@ -4,60 +4,67 @@ function _onload(data){
     _.dt=[];
     _.priotitas=data.priotitas;
     _.dinas=data.dinas;
-    
-    viewWebsite=_formData();
-    $('#bodyTM').html(viewWebsite);
-    $('#footer').html(data.tmFooter+data.footer);
+    _.tahun=data.tahun;
+    _.tahapan=data.tahapan;
 
-    // _startTabel("dt");
+    _.indDinas=0;
+    _.indPrio=0;
+    
+    const main=document.querySelector("main");
+    viewWebsite=_themaDashboard({menu:2});
+
+    viewWebsite+=_formData();
+
+    main.innerHTML=viewWebsite;
+    
+    const footer=document.querySelector("footer");
+    footer.innerHTML=`
+        <div class="container-fluid bg-info text-light p-1 text-center">
+            <p>BAPPEDA©2022,Kabupaten Sumbawa Barat</p>
+        </div>
+    `+modal_.ex1({
+        cls:"modal-dialog-centered modal-dialog-scrollable",
+        clsHeader:"",
+        clsBody:"",
+    });
+    $('#footer').html(data.footer+startmfc.endBootstrapHTML(2));
+    setTabel();
+    _startTabel("dt");
+    
 }
 function _formData() {
-    return `<div class="row shadow">`
+    return `<div class="container shadow p-0 mb-3">`
                 +_formIcon({
-                    icon:'<i class="mdi mdi-ladder" style="font-size: 20px;"></i>'
-                    ,text:"<h7>Daftar Usulan</h7>",
+                    icon:'<i class="mdi mdi-table" style="font-size: 20px;"></i>'
+                    ,text:"<h7>Sub Kegiatan</h7>",
                     classJudul:'col-8',
                     id:"form1",
-                    btn:_btnGroup([
-                        { 
-                            clsBtn:`btn-secondary shadow btn-block fzMfc`
-                            ,func:"_dlistExcell()"
-                            ,icon:`<i class="mdi mdi-file-lock"></i>Sub Kegiatan`
-                            ,title:"Donwload List Sub Kegiatan"
-                        },
-                        { 
-                            clsBtn:`btn-primary shadow m-0 btn-block fzMfc`
-                            ,func:"onOffForm(this)"
-                            ,icon:`<i class="mdi mdi-file-lock"></i>Entri Usulan`
-                            ,title:"Entri Usulan"
-                        }
-                    ],0),
+                    btn:'',
                     sizeCol:undefined,
-                    bgHeader:"bg-info text-light",
-                    attrHeader:`style="height: max-content;"`,
-                    bgForm:"#fff; font-size:15px;",
-                    isi:_lines({})
-                        +_inpComboBox({
+                    bgHeader:"bg-primary text-light",
+                    attrHeader:`"`,
+                    bgForm:"",
+                    isi:_inpComboBox({
                             judul:"Kecamatan",
-                            id:"kdprio",
+                            id:"kdKec",
                             color:"black",  
                             data:_.dinas,
-                            bg:"bg-info m-2",
+                            bg:"bg-warning m-2",
                             method:"sejajar",
-                            change:"_changePrio(this)",
+                            change:"_changeKec(this)",
                         })
                         +_inpComboBox({
                             judul:"Prioritas",
-                            id:"kdprio",
+                            id:"kdPrio",
                             color:"black",  
                             data:_.priotitas,
-                            bg:"bg-info m-2",
+                            index:"Bagus  H",
+                            bg:"bg-warning m-2",
                             method:"sejajar",
                             change:"_changePrio(this)",
                         })
                         +_lines({})
                         +`<div id='tabelShow' style="margin: auto;">`
-                           +setTabel()
                         +`</div>`,
                 })
             +`</div>`;
@@ -65,32 +72,89 @@ function _formData() {
 function setTabel(){
     infoSupport1=[];
     infoSupport1.push({ 
-        clsBtn:`btn-outline-danger fzMfc`
-        ,func:"delData()"
-        ,icon:`<i class="mdi mdi-delete-forever"></i>`
-        ,title:"Hapus"
+        clsBtn:`btn-outline-primary`
+        ,func:"_gousulanDetail()"
+        ,icon:`<i class="mdi mdi-arrow-right-bold-box"></i> view`
+        ,title:"view"
     });
-    return _tabelResponsive(
-        {
-            id:"dt"
-            ,isi:_tabel(
+    return $('#tabelShow').html(
+        _tabelResponsive({
+            id:"dt", 
+            class:'table-border',
+            isi:_tabel(
                 {
-                    data:[]
+                    data:_.dinas[_.indDinas].data[_.indPrio]
                     ,no:1
                     ,kolom:[
-                        "nama","keterangan","checkbox"
+                        "nmDinas","nmSub","tusulan"
                     ]
                     ,namaKolom:[
-                        "Tahun","Keterangan","Selected"
+                        "Dinas","Sub kegiatan","Total"
                     ],
-                    action:infoSupport1,
-                    func:"_setSelecter()"
+                    action:infoSupport1
                 })
-        });;
+        })
+    )
+}
+function _changeKec(v) {
+    _.indDinas=Number(v.value);
+    if(_.dinas[_.indDinas].data[_.indPrio]==undefined){
+        // proses pengecekan data dengan indek prio terpilih
+        _.indPrio=0;
+
+        if(_.dinas[_.indDinas].data[_.indPrio]==undefined){
+            // setelah index 0 tetap undifine maka get data
+            return getDataSubPrioritas();
+        }
+    }
+    $('#kdPrio').val(_.indPrio); // baik tetap ataupun berubah
+    setTabel();
+}
+function getDataSubPrioritas() {
+    param={
+        kdKec       :_.dinas[_.indDinas].value,
+        kdPri       :_.priotitas[_.indPrio].value,
+        tahun       :_.tahun
+    }
+    _post('proses/changePrioritas',param).then(res=>{
+        res=JSON.parse(res);
+        if(res.exec){
+            _modalHide('modal');
+            _respon(res.data);
+        }else{
+            return _toast({bg:'e', msg:res.msg});
+        }
+    });
+}
+function _respon(dt) {
+    if (dt.data!=undefined && dt.data.length>0) {
+        _.dinas[_.indDinas].data[_.indPrio]=dt.data;
+    }else{
+        _.dinas[_.indDinas].data[_.indPrio]=[];
+    }
+    setTabel();
 }
 function _changePrio(v) {
-    
+    _.indPrio=Number(v.value);
+    if(_.dinas[_.indDinas].data[_.indPrio]==undefined){
+        // jika undifine maka get data
+        return getDataSubPrioritas();
+    }
+    return setTabel();
 }
-function _dlistExcell(ind) {
-    _redirectOpen("laporan/listSubKegiatan");
+function _gousulanDetail(ind) {
+    param={
+        kdKec :_.dinas[_.indDinas].value,
+        // nmKec :_.dinas[_.indDinas].valueName,
+
+        kdPri :_.priotitas[_.indPrio].value,
+        // nmPri :_.priotitas[_.indPrio].valueName,
+
+        tahun :_.tahun,
+
+        kdSub :_.dinas[_.indDinas].data[_.indPrio][ind]['kdSub'],
+        // nmSub :_.dinas[_.indDinas].data[_.indPrio][ind]['nmSub'],
+        kdDinas :_.dinas[_.indDinas].data[_.indPrio][ind]['kdDinas'],
+    }
+    _redirectOpen("control/usulanDetail/"+btoa(JSON.stringify(param)));
 }
