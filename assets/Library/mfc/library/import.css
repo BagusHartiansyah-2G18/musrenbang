@@ -117,3 +117,8 @@ body{
 /* .imgColorOpacity20{
   background-color: rgba(10, 10, 10, 0.2);
 } */
+
+
+.dt-buttons{ /* support library tabel */
+  margin-bottom: 10px;
+}

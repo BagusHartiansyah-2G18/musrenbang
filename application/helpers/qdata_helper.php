@@ -56,20 +56,17 @@
         }
         return "
             select 
-                b.nmSub,a.kdSub,a.kdDinas,c.nmDinas,
+                b.nmSub,b.kdSub,b.kdDinas,c.nmDinas,
                 (
                     select concat(count(id),' usulan') from musrembang 
-                    where kdSub=a.kdSub and kdkec='".$kdkec."'  and 
-                    prioritas=a.idPri and kdDinas=a.kdDinas and tahapan='".$tahapan."' and tahun=a.tahun
+                    where kdSub=b.kdSub and kdkec='".$kdkec."'  and 
+                    prioritas=b.idPri and kdDinas=b.kdDinas and tahapan='".$tahapan."' and tahun=b.taSub
                 ) as tusulan
-            from musrembangview a 
-            join psub b on 
-                a.kdSub=b.kdSub and
-                a.kdDinas=b.kdDinas
+            from psub b 
             join dinas c on
                 b.kdDinas=c.kdDinas
             ".$qwhere."
-            GROUP BY a.kdSub,a.kdDinas";
+            GROUP BY b.kdSub,b.kdDinas";
     }
     function _dsub($where){
         $qwhere="";
@@ -84,12 +81,15 @@
     }
     function _cbDesa($where){
         $qwhere="";
+        $qselect='';
         if(strlen($where)>0){
             $qwhere=" where ".$where;
+        }else{
+            $qselect=',kdKec';
         }
         return "
             select 
-                nama as value, nama as valueName
+                nama as value, nama as valueName ".$qselect."
             from desa
             ".$qwhere;
     }
@@ -102,6 +102,19 @@
             select 
                 *
             from musrembang
+            ".$qwhere;
+    }
+    function _dmusrenbangJoin($where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            select 
+                a.*,
+                (select nmDinas from dinas where kdDinas=a.kdKec and taDinas=a.tahun) as nmKec,
+                (select nmDinas from dinas where kdDinas=a.kdDinas and taDinas=a.tahun) as nmDinas
+            from musrembang a
             ".$qwhere;
     }
     function _drespon($where){
@@ -244,7 +257,7 @@
         // pemberi keputusan status usulan
         $nmKeyTabel['k-'.$nm]=array(
             'kd'=>$unik.$no."/6",
-            'kdJabatan'=>$super,
+            'kdJabatan'=>$dev,
             'nm'=>($nm."-"),
             'page'=>'keputusan '.$nmPage
         );
@@ -369,7 +382,7 @@
             'page'=>'update'.$nmPage
         );
 
-        $no+=1;
+        $no+=1;  //9
         $nm="resp";//inp 
         $nmPage="respon usulan"; 
         $nmKeyTabel['p-'.$nm]=array( 
@@ -413,5 +426,14 @@
         JOIN appKey b on
             a.kdMember1 =b.kdMember  
         WHERE b.kdFitur like '%".$kodeForm."%' AND b.kdMember='".$kodeMember."' and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
+    }
+    function _qupdKeyGroup($onOff,$lengthKdPage,$kodeForm,$kodeMember,$tahun,$kdApp){
+        return "update appkey set kunci=".$onOff."
+                WHERE kdFitur like '%".$kodeForm."%' AND 
+                length(kdFitur)!=".$lengthKdPage." and
+                kdMember='".$kodeMember."' and 
+                ta='".$tahun."' and 
+                kdApp='".$kdApp."'
+            ";
     }
 ?>

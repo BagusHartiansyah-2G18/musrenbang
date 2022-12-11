@@ -6,6 +6,7 @@ function _onload(data){
     _.dinas=data.dinas;
     _.tahun=data.tahun;
     _.tahapan=data.tahapan;
+    _.key=data.key;
 
     _.indDinas=0;
     _.indPrio=0;
@@ -29,8 +30,6 @@ function _onload(data){
     });
     $('#footer').html(data.footer+startmfc.endBootstrapHTML(2));
     setTabel();
-    _startTabel("dt");
-    
 }
 function _formData() {
     return `<div class="container shadow p-0 mb-3">`
@@ -39,7 +38,14 @@ function _formData() {
                     ,text:"<h7>Sub Kegiatan</h7>",
                     classJudul:'col-8',
                     id:"form1",
-                    btn:'',
+                    btn:(!Number(_.key.e)?
+                            button_.ex2({
+                                text:`<span class="mdi mdi-database-export "></span> export`,
+                                cls:" btn-sm bg-info ",
+                                attr:` onclick='_fexp()' title="pengiriman data"`
+                            })
+                            :''
+                        ),
                     sizeCol:undefined,
                     bgHeader:"bg-primary text-light",
                     attrHeader:`"`,
@@ -51,6 +57,7 @@ function _formData() {
                             data:_.dinas,
                             bg:"bg-warning m-2",
                             method:"sejajar",
+                            index:"Bagus  H",
                             change:"_changeKec(this)",
                         })
                         +_inpComboBox({
@@ -77,7 +84,7 @@ function setTabel(){
         ,icon:`<i class="mdi mdi-arrow-right-bold-box"></i> view`
         ,title:"view"
     });
-    return $('#tabelShow').html(
+    $('#tabelShow').html(
         _tabelResponsive({
             id:"dt", 
             class:'table-border',
@@ -95,19 +102,19 @@ function setTabel(){
                 })
         })
     )
+    return _startTabel("dt");
 }
 function _changeKec(v) {
     _.indDinas=Number(v.value);
-    if(_.dinas[_.indDinas].data[_.indPrio]==undefined){
-        // proses pengecekan data dengan indek prio terpilih
-        _.indPrio=0;
-
+    if(_.dinas[_.indDinas].data!=undefined){
         if(_.dinas[_.indDinas].data[_.indPrio]==undefined){
             // setelah index 0 tetap undifine maka get data
             return getDataSubPrioritas();
         }
+    }else{
+        _.dinas[_.indDinas].data=[];
+        return getDataSubPrioritas();
     }
-    $('#kdPrio').val(_.indPrio); // baik tetap ataupun berubah
     setTabel();
 }
 function getDataSubPrioritas() {
@@ -157,4 +164,41 @@ function _gousulanDetail(ind) {
         kdDinas :_.dinas[_.indDinas].data[_.indPrio][ind]['kdDinas'],
     }
     _redirectOpen("control/usulanDetail/"+btoa(JSON.stringify(param)));
+}
+function _fexp() {
+    modal_.setMo({
+        ex:1,
+        header:`<h1 class="modal-title fs-5" id="staticBackdropLiveLabel">${"Konfirmasi".toUpperCase()}</h1>`,
+        body:"mengexport / mengirimkan data menuju tahapan selanjutnya akan beraksi seperti ini :<br>"+
+            modal_.ol({
+                cls:'',
+                clsLi:'',
+                data:[
+                    "mengunci aksi pada tahapan ini",
+                    "data pada tahapan ini akan diajukan menuju tahapan berikutnya",
+                    "sistem akan menghapus data pada tahapan berikutnya jika terdapat data"],
+            })+`
+                lakukan export data ???
+            `,
+        footer:modal_.btnClose("btn-secondary")
+            +_btn({
+                judul:"export",
+                attr:"style='float:right; padding:5px;;' onclick='_fexped()'",
+                class:"btn btn-info"
+            })
+    });    
+    $('#modalEx1').modal("show");
+}
+function _fexped(){
+    param={
+        kdKec :_.dinas[_.indDinas].value,
+    }
+    _post('proses/expTahapan',param).then(res=>{
+        res=JSON.parse(res);
+        if(res.exec){
+            _reload();
+        }else{
+            return _toast({bg:'e', msg:res.msg});
+        }
+    });
 }

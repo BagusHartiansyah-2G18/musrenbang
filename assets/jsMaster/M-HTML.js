@@ -423,6 +423,8 @@ function _tabel(v){
     fdata+=`</tr>
         </thead>
         <tbody>`;
+    
+    let nmId='col',actId='';
     v.data.forEach((v1,i1) => {
         fdata+=`
             <tr>`;
@@ -431,6 +433,7 @@ function _tabel(v){
             }
             v.no+=1;
         v.kolom.forEach((v2,i2) => {
+            actId=`id="`+(v.id!=undefined? nmId+(v1.ind==undefined?v.no-2:v1.ind)+"_"+(i2+1):'')+`"`;
             // f1data=v2.split("$");
             // if(f1data.length==2){
             //     fdata+=`<td>`+_$(v1[f1data[0]])+`</td>`;
@@ -448,74 +451,76 @@ function _tabel(v){
             kond=true;
             f1data=v2.split("$");
             if(f1data.length==2){
-                fdata+=`<td>`+_$(v1[f1data[0]])+`</td>`;
+                fdata+=`<td ${actId}>`+_$(v1[f1data[0]])+`</td>`;
                 kond=false;
             }
             if(v2=="checkbox" && kond){
                 // console.log(v1['checked']);
                 if(v.func!=undefined){
                     kond=false;
-                    fdata+=`<td>`+_inp({type:"checkbox", attr:" onchange='"+v.func.substring(0,v.func.length-1)+i1+",this)'",checked:_trueChecked(1,Number(v1['checked']))  })+`</td>`;
+                    fdata+=`<td ${actId}>`+_inp({type:"checkbox", attr:" onchange='"+v.func.substring(0,v.func.length-1)+i1+",this)'",checked:_trueChecked(1,Number(v1['checked']))  })+`</td>`;
                 }else{
                     
                     kond=false;
-                    fdata+=`<td>`+_inp({type:"checkbox" ,attr:"", checked:_trueChecked(1,Number(v1['checked']))})+`</td>`;
+                    fdata+=`<td ${actId}>`+_inp({type:"checkbox" ,attr:"", checked:_trueChecked(1,Number(v1['checked']))})+`</td>`;
                 }
             }
             f1data=v2.split("+");
             if(f1data.length==2){
-                fdata+=`<td>`+_$(
+                fdata+=`<td ${actId}>`+_$(
                     Number(v1[f1data[0]])+Number(v1[f1data[1]])
                     )+`</td>`;
                 kond=false;
             }
             f1data=v2.split("-");
             if(f1data.length==2){
-                fdata+=`<td>`+_$(
+                fdata+=`<td ${actId}>`+_$(
                     Number(v1[f1data[0]])-Number(v1[f1data[1]])
                 )+`</td>`;
                 kond=false;
             }
             f1data=v2.split("*");
             if(f1data.length==2){
-                fdata+=`<td>`+_$(
+                fdata+=`<td ${actId}>`+_$(
                     Number(v1[f1data[0]])*Number(v1[f1data[1]])
                 )+`</td>`;
                 kond=false;
             }
             f1data=v2.split("/");
             if(f1data.length==2){
-                fdata+=`<td>`+_$(
+                fdata+=`<td ${actId}>`+_$(
                     Number(v1[f1data[0]])/Number(v1[f1data[1]])
                 )+`</td>`;
                 kond=false;
             }
             f1data=v2.split("&");
             if(f1data.length==2){
-                fdata+=`<td>`+v1[f1data[0]]+` `+v1[f1data[1]]+`</td>`;
+                fdata+=`<td ${actId}>`+v1[f1data[0]]+` `+v1[f1data[1]]+`</td>`;
                 kond=false;
             }
             f1data=v2.split("<tm2>");
             if(f1data.length==2){
-                fdata+=`<td>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(1,20)+"...":v1[f1data[0]])+`</td>`;
+                fdata+=`<td ${actId}>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(0,20)+"...":v1[f1data[0]])+`</td>`;
                 kond=false;
             }
             f1data=v2.split("<tm3>");
             if(f1data.length==2){
-                fdata+=`<td>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(1,30)+"...":v1[f1data[0]])+`</td>`;
+                fdata+=`<td ${actId}>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(0,30)+"...":v1[f1data[0]])+`</td>`;
                 kond=false;
             }
             f1data=v2.split("<tm5>");
             if(f1data.length==2){
-                fdata+=`<td>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(1,50)+"...":v1[f1data[0]])+`</td>`;
+                fdata+=`<td ${actId}>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(0,50)+"...":v1[f1data[0]])+`</td>`;
                 kond=false;
             }
             if(kond){
-                fdata+=`<td>`+v1[v2]+`</td>`;
+                fdata+=`<td ${actId}>`+v1[v2]+`</td>`;
             }
         });
         if(faction){
-            fdata+=`<td style="min-width: 15%;">`+_btnGroup(v.action,v.no-2)+`</td>`;
+            // fdata+=`<td style="min-width: 15%;">`+_btnGroup(v.action,v.no-2)+`</td>`;
+            fdata+=`<td style="min-width: 15%;">`+_btnGroup(v.action,(v1.ind==undefined?v.no-2:v1.ind))+`</td>`;
+            
         }
         fdata+=`</tr>`;
         if(v.subKolom!=undefined && v.subKolom.length>0){
@@ -528,7 +533,7 @@ function _tabel(v){
                 fdata+=`<td>`+v1[v3]+`</td>`;
             })
             if(faction){
-                fdata+=`<td style="min-width: 15%;">`+_btnGroup(v.action,v.no-2)+`</td>`;
+                fdata+=`<td style="min-width: 15%;">`+_btnGroup(v.action,(v1.ind==undefined?v.no-2:v1.ind))+`</td>`;
             }
             fdata+=`</tr>`;
         }

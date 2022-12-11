@@ -74,7 +74,7 @@ function _formData() {
                     ,text:"<h7>Respon Usulan</h7>",
                     classJudul:'col-8',
                     id:"form1",
-                    btn:(Number(_.key.c)?
+                    btn:(!Number(_.key.c)?
                             button_.ex2({
                                 text:`<span class="mdi mdi-form-select "></span> Form Entri`,
                                 cls:" btn-sm bg-info ",
@@ -203,6 +203,12 @@ function setTabel(){
         ,title:"Informasi"
     });
     infoSupport1.push({ 
+        clsBtn:`btn-outline-primary`
+        ,func:"_goDokumen()"
+        ,icon:`<i class="mdi mdi-file-chart-check-outline"></i>`
+        ,title:"dokumen"
+    });
+    infoSupport1.push({ 
         clsBtn:`btn-outline-danger`
         ,func:"_fdel()"
         ,icon:`<i class="mdi mdi-delete"></i>`
@@ -245,9 +251,9 @@ function _fadd() {
         _.modelON=true;
         $('#modalEx1').modal("show");
         _startEditorTiny(router)
-        return tinymce.get('isi').setContent('');
-        
+        // return tinymce.get('isi').setContent('');
     }
+    tinymce.get('isi').setContent('')
     return $('#modalEx1').modal("show");
 }
 function _fadded(){
@@ -255,7 +261,7 @@ function _fadded(){
         uraian:tinymce.get('isi').getContent(),
         id    :_.ket.id,
         kdKec    :_.ket.kdKec,
-        tahun    :_.ket.tahun
+        tahun    :_.ket.tahun,
     }
     if(_isNull(param.uraian))return _toast({bg:'e',msg:'entri uraian !!!'});
     // if(_file.data.length==0)return _toast({bg:'e',msg:'Tambahkan Produk File !!!'});
@@ -320,7 +326,8 @@ function _fdeled(ind){
     param={
         id    :_.ket.id,
         kdKec    :_.ket.kdKec,
-        tahun    :_.ket.tahun
+        tahun    :_.ket.tahun,
+        kdRespon :_.data[ind].kdRespon
     }
     
     _post('proses/delResponUsulan',param).then(res=>{
@@ -332,4 +339,10 @@ function _fdeled(ind){
             return _toast({bg:'e', msg:res.msg});
         }
     });
+}
+function _goDokumen(ind) {
+    if(_.data[ind].file.length==0){
+        return _toast({bg:'e',msg:'Maaf, respon ini tidak memiliki dokumen !!!'})
+    }
+    _redirectOpen('laporan/previewFile/'+btoa(JSON.stringify({files:_.data[ind].file})));
 }

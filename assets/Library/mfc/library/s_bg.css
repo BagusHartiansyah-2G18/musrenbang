@@ -39,6 +39,30 @@
   }
   
   
+  .bgCAbs1{
+    background-image: url('./file/bg-abs1.webp');
+    background-size: cover;
+  }
+  .bgCAbs2{
+    background-image: url('./file/bg-abs2.jpg');
+    background-size: cover;
+  }
+  .bgCAbs3{
+    background-image: url('./file/bg-abs3.jpg');
+    background-size: cover;
+  }
+  .bgCAbs4{
+    background-image: url('./file/bg-abs4.jpg');
+    background-size: cover;
+  }
+  .bgCAbs5{
+    background-image: url('./file/bg-abs5.jpg');
+    background-size: cover;
+  }
+  .bgCAbs6{
+    background-image: url('./file/bg-abs6.jpg');
+    background-size: cover;
+  }
   .bgCAbs7{
     background-image: url('./file/bg-abs7.jpg');
     background-size: cover;
@@ -47,12 +71,44 @@
     background-image: url('./file/bg-abs8.jpg');
     background-size: cover;
   }
+  .bgCAbs9{
+    background-image: url('./file/bg-abs9.jpg');
+    background-size: cover;
+  }
+  .bgCAbs10{
+    background-image: url('./file/bg-abs10.jpg');
+    background-size: cover;
+  }
+  .bgCAbs11{
+    background-image: url('./file/bg-abs11.jpg');
+    background-size: cover;
+  }
+  .bgCAbs12{
+    background-image: url('./file/bg-abs12.jpg');
+    background-size: cover;
+  }
+  .bgCAbs13{
+    background-image: url('./file/bg-abs13.jpg');
+    background-size: cover;
+  }
+  .bgCAbs14{
+    background-image: url('./file/bg-abs14.jpg');
+    background-size: cover;
+  }
   .bgCAbs15{
     background-image: url('./file/bg-abs15.jpg');
     background-size: cover;
   }
+  .bgCAbs16{
+    background-image: url('./file/bg-abs16.jpg');
+    background-size: cover;
+  }
   .bgCAbs17{
     background-image: url('./file/bg-abs17.jpg');
+    background-size: cover;
+  }
+  .bgCAbs18{
+    background-image: url('./file/bg-abs18.png');
     background-size: cover;
   }
   
@@ -66,18 +122,30 @@
     background-size: cover;
   }
   .bgksb3{
-    background-image: url('./file/bg-c3.jpg');
+    background-image: url('./file/ksb3.png');
     background-size: cover;
   }
   .bgksb4{
-    background-image: url('./file/bg-c4.jpg');
+    background-image: url('./file/ksb4.png');
     background-size: cover;
   }
   .bgksb5{
-    background-image: url('./file/bg-c5.jpg');
+    background-image: url('./file/ksb5.png');
     background-size: cover;
   }
   .bgksb6{
-    background-image: url('./file/bg-c6.jpg');
+    background-image: url('./file/ksb6.jpg');
+    background-size: cover;
+  }
+  .bgksb7{
+    background-image: url('./file/ksb7.jpg');
+    background-size: cover;
+  }
+  .bgksb8{
+    background-image: url('./file/ksb8.jpg');
+    background-size: cover;
+  }
+  .bgksb9{
+    background-image: url('./file/ksb9.jpg');
     background-size: cover;
   }

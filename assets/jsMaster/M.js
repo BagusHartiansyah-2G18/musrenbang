@@ -324,7 +324,7 @@ function _startTabel(id,all){
                 "pageLength": _pageLength
             }); 
         }else if(all){
-            return $('#'+id).DataTable({
+            $('#'+id).DataTable({
                 // buttons: true
                 // dom: 'Bfrtip',
                 pageLength: _pageLength,
@@ -337,6 +337,8 @@ function _startTabel(id,all){
                 ],
                 
             });
+            $('#dt_length').addClass(" col-6 ps-3 d-inline-block"); // float-end
+            $('#dt_filter').addClass(" col-4 d-inline-block");
         }else{
             return $('#'+id).DataTable({
                 // buttons: true

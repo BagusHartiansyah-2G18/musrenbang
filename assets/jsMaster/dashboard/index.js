@@ -2,6 +2,7 @@ function _onload(data){
     myCode=data.code;
     _.dt=[];
     _.tahun=data.tahun;
+    _.tahapan=data.tahapan;
     
     const main=document.querySelector("main");
     viewWebsite=_themaDashboardNoMenu({
@@ -87,5 +88,8 @@ function htmlTahunOption() {
     `;
 }
 function _selectTahun(tahun) {
-    return _redirect("control/usulan/"+tahun);
+    if(_.tahapan==1){
+        return _redirect("control/usulan/"+tahun);
+    }
+    return _redirect("control/usulanPembahasan/"+tahun);
 }

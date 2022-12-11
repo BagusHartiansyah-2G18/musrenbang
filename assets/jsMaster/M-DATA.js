@@ -24,6 +24,14 @@ function _themaDashboard(v){
                 <b>pengaturan</b>
             </a>`
     });
+    if(_kdJabatan==3){
+      header_.hmenu.push({
+        htmlLi:`<a href="${_urlMaster+"control/prioritas"}" class="nav-link ${(v.menu==3?active:noactive)} text-center" target="_blank">
+            <span class="mdi mdi-shield-key-outline d-block mdi-18px"></span>
+                <b>master</b>
+            </a>`
+      });
+    }
 
    
 
@@ -292,6 +300,35 @@ function _fInfoUsulan(v){
           ]
         })
 }
+function _formchangeStatus(bg){
+  fcolor='text-dark'
+  return _inpGroupPrepend({
+        placeholder:"",
+        icon:'<i class="mdi mdi-lightbulb-question-outline '+fcolor+'"></i>',
+        bg:bg,
+        attrSpan:``,
+        isi:_inpComboBox({
+            id:"status",
+            data:_getdataStaus(),
+            change:"",
+            bg:" border",
+            getCombo:true
+        })
+      })
+      +_inpGroupPrepend({
+        placeholder:"",
+        icon:'<i class="mdi mdi-form-select '+fcolor+'"></i>',
+        bg:bg,
+        attrSpan:`style="height: 100%;"`,
+        isi:_textArea({
+            hint:"Keterangan",
+            id:"alasan",
+            row:"3",
+            text:'',
+            attr:''
+        })
+      }) 
+}
 function _frespon(){
   fsize="130px;";
   fcolor='text-dark';
@@ -310,4 +347,27 @@ function _frespon(){
           value:'',
           clsArea:''
         })
+}
+function _getdataStaus() {
+  return [
+    {
+      value:'DIUSULKAN',
+      valueName:'DIUSULKAN',
+    },{
+      value:'DITOLAK',
+      valueName:'DITOLAK',
+    },{
+      value:'DITERIMA',
+      valueName:'DITERIMA',
+    },
+  ]
+}
+function _filterData(data,kdKec) {
+  let fresp=[];
+  data.forEach((fv,fi) => {
+    if(fv.kdKec==kdKec){
+      fresp.push(fv);
+    }
+  });
+  return fresp;
 }

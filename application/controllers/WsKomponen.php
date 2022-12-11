@@ -62,14 +62,15 @@ class WsKomponen extends CI_Controller {
         $this->_['tahun']=$this->qexec->_func(_tahun("where selected=1"))[0]['nama'];
         
         $this->_['dinas']      =array_merge(
-            $this->qexec->_func(_cbDinas(" where nmDinas like '%KECAMATAN%' group by kdDinas")),
-            $this->qexec->_func(_cbDinas(" where nmDinas like '%BADAN PERENCANAAN%' group by kdDinas"))
+            $this->qexec->_func(_cbDinas(" where nmDinas like '%KECAMATAN%' and taDinas='".$this->_['tahun']."'")),
+            $this->qexec->_func(_cbDinas(" where nmDinas like '%BADAN PERENCANAAN%' and taDinas='".$this->_['tahun']."'"))
         );
         return print_r(json_encode($this->_));
     }
     function dashboard($page){
+        
         $this->_['head']    =$this->mbgs->_getJsMaster($page);
-        // $this->_['tahun']   =$this->qexec->_func(_tahunForOption(""));
+        $this->_['tahapan']   =$this->tahapan;
         $this->_['tahun']=$this->qexec->_func(_tahun("where selected=1"))[0]['nama'];
         return print_r(json_encode($this->_));
     }
@@ -78,6 +79,14 @@ class WsKomponen extends CI_Controller {
         $this->_['footer'].=$this->mbgs->_getJsTabel();
         $this->_['tahun']=$this->tahun;
         $this->_['tahapan']=$this->getTahapan($this->tahapan);
+
+        $this->_['key']=$this->getKeyAct(
+            "p-usu".$this->sess->tahapan,
+            [
+                "e"=>_getNKA("e-usu".$this->sess->tahapan,false), 
+            ]
+        ); 
+        
         if($this->kdJabatan==1){
             $this->_['dinas']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."' group by kdDinas"));
         }else{
@@ -87,7 +96,7 @@ class WsKomponen extends CI_Controller {
         $this->_['priotitas']=$this->qexec->_func(_cbPrio(" where tahun='".$this->tahun."'"));
         
         //ketika pra kecamatan, maka data sub kegiatan
-        $this->_['dinas'][0]['data'][0]=$this->qexec->_func(_dtsubMusrenbang($this->_['dinas'][0]['value'],$this->tahapan," a.idPri=1 and a.tahun='".$this->tahun."' "));
+        $this->_['dinas'][0]['data'][0]=$this->qexec->_func(_dtsubMusrenbang($this->_['dinas'][0]['value'],$this->tahapan," b.idPri=1 and b.taSub='".$this->tahun."' "));
 
         return print_r(json_encode($this->_));
     }
@@ -165,7 +174,45 @@ class WsKomponen extends CI_Controller {
         $this->_['data']=$this->qexec->_func(_drespon(" a.id='".$val->id."' and a.kdKec='".$val->kdKec."' and a.tahun='".$val->tahun."' and a.qdel=0 "));
         return print_r(json_encode($this->_));
     }
+    function usulanPembahasan($page){
+        $this->_['head']=$this->mbgs->_getJsMaster($page);
+        $this->_['footer'].=$this->mbgs->_getJsTabel();
+        $this->_['tahun']=$this->tahun;
+        $this->_['tahapan']=$this->getTahapan($this->tahapan);
 
+        $this->_['key']=$this->getKeyAct(
+            "p-usu".$this->sess->tahapan,
+            [
+                "p"=>_getNKA("p-usu".$this->sess->tahapan,false),
+                "c"=>_getNKA("c-usu".$this->sess->tahapan,false),
+                "u"=>_getNKA("u-usu".$this->sess->tahapan,false),
+                "d"=>_getNKA("d-usu".$this->sess->tahapan,false),
+                
+                "e"=>_getNKA("e-usu".$this->sess->tahapan,false),
+                "r"=>_getNKA("r-usu".$this->sess->tahapan,false),
+                "k"=>_getNKA("k-usu".$this->sess->tahapan,false),
+            ]
+        );  
+        
+        $this->_['tahapan']=$this->getTahapan($this->tahapan);
+        $this->_['priotitas']=$this->qexec->_func(_cbPrio(" where tahun='".$this->tahun."'"));
+        
+        if($this->kdJabatan==1){
+            $this->_['kec']=$this->qexec->_func(_cbDinas(" where kdDinas='".$this->kdDinas."' and taDinas='".$this->tahun."'"));
+        }else{
+            $this->_['kec']=$this->qexec->_func(_cbDinas(" where nmDinas like '%KECAMATAN%' and taDinas='".$this->tahun."'"));
+        }
+
+        $this->_['priotitas'][0]['data']=$this->qexec->_func(_dmusrenbangJoin(" 
+            tahun='".$this->tahun."' and
+            prioritas='".$this->_['priotitas'][0]['value']."' and tahapan='".$this->tahapan."'
+            GROUP BY id,kdKec
+        "));
+        $this->_['desa']=$this->qexec->_func(_cbDesa(""));
+        
+        return print_r(json_encode($this->_));
+    }
+    
     function getTahapan($ind){
         switch ($ind) {
             case 1: return 'PRA MUSRENBANG';

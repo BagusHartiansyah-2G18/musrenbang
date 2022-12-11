@@ -11,4 +11,11 @@ class LibMfcHtml{
         }
         return lv;
     }
+    ol=(cp)=>{
+        let cr=`<ol class='${this.delUndife(cp.cls)}'>`; // class resppon
+        cp.data.forEach((v) => {  
+            cr+=`<li class='${this.delUndife(cp.clsLi)}'>${v}</li>`;
+        });
+        return cr+='</ol>';
+    }
 }

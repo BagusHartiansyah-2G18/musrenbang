@@ -7,7 +7,7 @@ class Proses extends CI_Controller {
         parent::__construct();
         $this->mbgs->_setBaseUrl(base_url());
         $this->_=array();
-
+        $this->dapp=$this->mbgs->_getBasisData();
         $this->kd=$this->sess->kdMember;
         $this->nm=$this->sess->nama;
         $this->kdJabatan=$this->sess->kdMemberJabatan;
@@ -63,7 +63,7 @@ class Proses extends CI_Controller {
             $kdKec   =$baseEND->{'kdKec'};
             $kdPri   =$baseEND->{'kdPri'};
             $tahun   =$baseEND->{'tahun'};
-            $this->_['data']=$this->qexec->_func(_dtsubMusrenbang($kdKec,$this->tahapan," a.idPri='".$kdPri."' and a.tahun='".$tahun."' "));
+            $this->_['data']=$this->qexec->_func(_dtsubMusrenbang($kdKec,$this->tahapan," b.idPri='".$kdPri."' and b.taSub='".$tahun."' "));
             return $this->mbgs->resTrue($this->_);
         }
     }
@@ -173,6 +173,95 @@ class Proses extends CI_Controller {
             }
         }
     }
+    public function updUsulanJoin(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $masalah  =$baseEND->{'masalah'};
+            $uraianPekerjaan    =$baseEND->{'uraianPekerjaan'};
+            $desa  =$baseEND->{'desa'};
+            $lokasi    =$baseEND->{'lokasi'};
+
+            $volume  =$baseEND->{'volume'};
+            $satuan    =$baseEND->{'satuan'};
+            $paguAnggaran  =$baseEND->{'paguAnggaran'};
+            $val    =json_decode((base64_decode($baseEND->{'val'})));
+            $id     =$baseEND->{'id'};
+
+            $q="
+                update `musrembang` set
+                    `masalah`=".$this->mbgs->_valforQuery($masalah).", `uraianPekerjaan`=".$this->mbgs->_valforQuery($uraianPekerjaan).", 
+                    `desa`=".$this->mbgs->_valforQuery($desa).", `lokasi`=".$this->mbgs->_valforQuery($lokasi).", 
+                    `volume`=".$this->mbgs->_valforQuery($volume).", `satuan`=".$this->mbgs->_valforQuery($satuan).", 
+                    `paguAnggaran`=".$this->mbgs->_valforQuery($paguAnggaran)."
+                    
+                    where 
+                    `id`=".$this->mbgs->_valforQuery($id)." and
+                    `kdKec`=".$this->mbgs->_valforQuery($val->kdKec)." and
+                    `kdDinas`=".$this->mbgs->_valforQuery($val->kdDinas)." and
+                    `kdSub`=".$this->mbgs->_valforQuery($val->kdSub)." and
+                    `prioritas`=".$this->mbgs->_valforQuery($val->kdPri)." and
+                    `tahapan`=".$this->mbgs->_valforQuery($this->tahapan)." and
+                    `tahun`=".$this->mbgs->_valforQuery($val->tahun)."
+            ";
+            $check=$this->qexec->_proc($q);
+            if($check){
+                $this->_['data']=$this->qexec->_func(
+                    _dmusrenbangJoin(" 
+                        id=".$this->mbgs->_valforQuery($id)." and
+                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
+                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
+                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
+                        GROUP BY id,kdKec
+                    ")
+                );
+                return $this->mbgs->resTrue($this->_);
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
+            }
+        }
+    }
+    public function updStatusUsulan(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $status  =$baseEND->{'status'};
+            $alasan    =$baseEND->{'alasan'};
+            $val    =json_decode((base64_decode($baseEND->{'val'})));
+            $id     =$baseEND->{'id'};
+
+            $q="
+                update `musrembang` set
+                    `status`=".$this->mbgs->_valforQuery($status).", 
+                    `alasan`=".$this->mbgs->_valforQuery($alasan)."
+                    where 
+                    `id`=".$this->mbgs->_valforQuery($id)." and
+                    `kdKec`=".$this->mbgs->_valforQuery($val->kdKec)." and
+                    `kdDinas`=".$this->mbgs->_valforQuery($val->kdDinas)." and
+                    `kdSub`=".$this->mbgs->_valforQuery($val->kdSub)." and
+                    `prioritas`=".$this->mbgs->_valforQuery($val->kdPri)." and
+                    `tahapan`=".$this->mbgs->_valforQuery($this->tahapan)." and
+                    `tahun`=".$this->mbgs->_valforQuery($val->tahun)."
+            ";
+            $check=$this->qexec->_proc($q);
+            if($check){
+                $this->_['data']=$this->qexec->_func(
+                    _dmusrenbangJoin(" 
+                        id=".$this->mbgs->_valforQuery($id)." and
+                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
+                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
+                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
+                        GROUP BY id,kdKec
+                    ")
+                );
+                return $this->mbgs->resTrue($this->_);
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
+            }
+        }
+    }
     public function delUsulan(){
         if($this->sess->kdMember==null){
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
@@ -204,6 +293,76 @@ class Proses extends CI_Controller {
             }else{
                 return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
             }
+        }
+    }
+    public function expTahapan(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $kdkey=_getNKA("p-usu".$this->tahapan,false);
+            $qeuryUpdKey=_qupdKeyGroup(
+                1,
+                strlen($kdkey),
+                $kdkey,
+                $this->sess->kdMember1,
+                $this->sess->tahun,
+                $this->dapp['kd']
+            );
+
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $kdKec    =$baseEND->{'kdKec'};
+
+            $where=" and status='DITERIMA'";
+            $qkdKec="";
+            if($this->tahapan==1){ //DITERIMA DITOLAK DIUSULKAN
+                $qkdKec=" and`kdKec`=".$this->mbgs->_valforQuery($kdKec)." ";
+                $where=" and status='DIUSULKAN'".$qkdKec; 
+            }
+            $q="
+                delete from `musrembang` where 
+                    `tahapan`=".$this->mbgs->_valforQuery(($this->tahapan+1))." and
+                    `tahun`=".$this->mbgs->_valforQuery($this->tahun)."
+                    ".$qkdKec.";
+                insert into musrembang (
+                        id, kdKec, kdDinas, kdSub, prioritas, masalah, 
+                        uraianPekerjaan, pengusul, desa, lokasi, volume, satuan, 
+                        paguAnggaran,tahapan, status, 
+                        alasan, date, tahun
+                    )(
+                    select 
+                        id, kdKec, kdDinas, kdSub, prioritas, masalah, 
+                        uraianPekerjaan, pengusul, desa, lokasi, volume, satuan, 
+                        paguAnggaran,'".($this->tahapan+1)."','DIUSULKAN' as status, 
+                        '', now(), tahun
+                    from musrembang where
+                    `tahapan`=".$this->mbgs->_valforQuery($this->tahapan)." and
+                    `tahun`=".$this->mbgs->_valforQuery($this->tahun)."
+                    ".$qkdKec."
+                    ".$where."
+                );
+                ".$qeuryUpdKey."
+            ";
+            // return print_r($q);
+            $check=$this->qexec->_multiProc($q);
+            if($check){
+                return $this->mbgs->resTrue($this->_);
+            }else{
+                return $this->mbgs->resFalse("Terjadi Kesalahan dalam proses perubahan!!!");
+            }
+        }
+    }
+    public function getDataPrioritas(){
+        if($this->sess->kdMember==null){
+            return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
+        }else{
+            $baseEND=json_decode((base64_decode($_POST['data'])));
+            $kdPri   =$baseEND->{'kdPri'};
+            $this->_['data']=$this->qexec->_func(_dmusrenbangJoin("
+                tahun='".$this->tahun."' and
+                prioritas='".$kdPri."' and tahapan='".$this->tahapan."'
+                GROUP BY id,kdKec
+            "));
+            return $this->mbgs->resTrue($this->_);
         }
     }
 
@@ -249,6 +408,9 @@ class Proses extends CI_Controller {
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
         }else{
             $file=$_POST['file'];
+            if(empty($file)){
+                $file=[];
+            }
 
             $baseEND=json_decode((base64_decode($_POST['data'])));
             $id         =$baseEND->{'id'};
@@ -300,12 +462,14 @@ class Proses extends CI_Controller {
             $id         =$baseEND->{'id'};
             $kdKec      =$baseEND->{'kdKec'};
             $tahun      =$baseEND->{'tahun'};
+            $kdRespon  =$baseEND->{'kdRespon'};
             
             $q="
                 update mus_respon set qdel=1
                 where id=".$this->mbgs->_valforQuery($id)." and 
                 kdKec=".$this->mbgs->_valforQuery($kdKec)." and
-                tahun=".$this->mbgs->_valforQuery($tahun)."
+                tahun=".$this->mbgs->_valforQuery($tahun)." and
+                kdRespon=".$this->mbgs->_valforQuery($kdRespon)."
             ";
             // return print_r($q);
             $check=$this->qexec->_proc($q);

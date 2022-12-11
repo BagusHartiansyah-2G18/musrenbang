@@ -16,6 +16,8 @@ _file={
   ,maxUpload:2
   ,idView:"files"
 },
+_urlMaster='http://localhost/bappedax/master/',
+// _urlMaster='https://bappedaksb.com/master/',
 _pageLength=25,
 _notif=false,
 _vmaxTabel=3;

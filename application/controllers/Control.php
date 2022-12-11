@@ -49,7 +49,10 @@ class Control extends CI_Controller {
                 'email'=>$member[0]['email'],
                 'kdJabatan'=>$member[0]['kdJabatan'],
                 'tahun'=>0,
-                'tahapan'=>$tahapan
+                'tahapan'=>$tahapan,
+                // kebutuuhan e master 
+                'keyTahapan'=>_getNKA("p-usu".$tahapan,false),
+                'kdApp'=>$this->dapp['kd']
             );
             
             // $res=$this->mbgs->_getAllFile("/fs_sistem/session");
@@ -118,6 +121,21 @@ class Control extends CI_Controller {
             $this->_['page']="respon";
             $this->_['param']=$val;
 		    $this->load->view('indexMfc',$this->_);
+        }else{
+            if($portal['msg']=="session"){
+                return $this->logout();
+            }else{
+                return $this->dashboard("null");
+            }
+        } 
+    }
+    public function usulanPembahasan($val){
+        $this->sess->tahun=$val;
+        $portal=$this->_keamanan(_getNKA("p-usu".$this->sess->tahapan,false));
+        if($portal['exec']){
+            $this->_['page']="usulanPembahasan";
+            $this->_['param']=$val;
+            $this->load->view('indexMfc',$this->_);
         }else{
             if($portal['msg']=="session"){
                 return $this->logout();
@@ -217,7 +235,7 @@ class Control extends CI_Controller {
         // $a['kdJabatan']="6";
         // return print_r(base64_encode(json_encode($a)));
         // eyJrZE1lbWJlciI6IjJHMTgtbWVtYi0xIiwia2RKYWJhdGFuIjoiNiJ9
-        $tahunAktif=$this->qexec->_func("select nama from tahun where selected=1")[0];
+        $tahunAktif=$this->qexec->_func("select nama from tahun where selected=1")[0]['nama'];
         $baseEND=json_decode((base64_decode($val)));
         $kdMember=$baseEND->{'kdMember'};
         $kdJabatan=$baseEND->{'kdJabatan'};
