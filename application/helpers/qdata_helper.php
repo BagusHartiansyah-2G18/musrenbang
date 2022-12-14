@@ -460,7 +460,7 @@
         return "SELECT 
             kdFitur,kunci
         FROM member a 
-        JOIN appKey b on
+        JOIN appkey b on
             a.kdMember1 =b.kdMember  
         WHERE b.kdFitur like '%".$kodeForm."%' AND b.kdMember='".$kodeMember."' and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
     }
