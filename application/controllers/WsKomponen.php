@@ -60,11 +60,22 @@ class WsKomponen extends CI_Controller {
         $this->_['head']=$this->mbgs->_getJsMaster($page);
         $this->_['footer'].=$this->mbgs->_getJsChart();
         $this->_['tahun']=$this->qexec->_func(_tahun("where selected=1"))[0]['nama'];
-        
+        $this->_['u1']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],1))[0];
+        $this->_['u2']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],2))[0];
+        $this->_['u3']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],3))[0];
+        $this->_['u4']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],4))[0];
+        $this->_['data']=$this->qexec->_func(_cbDinas(" where nmDinas like '%KECAMATAN%' and taDinas='".$this->_['tahun']."'"));
         $this->_['dinas']      =array_merge(
-            $this->qexec->_func(_cbDinas(" where nmDinas like '%KECAMATAN%' and taDinas='".$this->_['tahun']."'")),
+            $this->_['data'],
             $this->qexec->_func(_cbDinas(" where nmDinas like '%BADAN PERENCANAAN%' and taDinas='".$this->_['tahun']."'"))
         );
+
+        foreach ($this->_['data'] as $i => $v) {
+            $this->_['data'][$i]['tr1']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],"1 and kdKec='".$v['value']."'"))[0];
+            $this->_['data'][$i]['tr2']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],"2 and kdKec='".$v['value']."'"))[0];
+            $this->_['data'][$i]['tr3']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],"3 and kdKec='".$v['value']."'"))[0];
+            $this->_['data'][$i]['tr4']=$this->qexec->_func(_dtotalUsulan($this->_['tahun'],"4 and kdKec='".$v['value']."'"))[0];
+        }
         return print_r(json_encode($this->_));
     }
     function dashboard($page){
@@ -204,9 +215,9 @@ class WsKomponen extends CI_Controller {
         }
 
         $this->_['priotitas'][0]['data']=$this->qexec->_func(_dmusrenbangJoin(" 
-            tahun='".$this->tahun."' and
-            prioritas='".$this->_['priotitas'][0]['value']."' and tahapan='".$this->tahapan."'
-            GROUP BY id,kdKec
+            a.tahun='".$this->tahun."' and
+            a.prioritas='".$this->_['priotitas'][0]['value']."' and a.tahapan='".$this->tahapan."'
+            GROUP BY a.id,a.kdKec
         "));
         $this->_['desa']=$this->qexec->_func(_cbDesa(""));
         

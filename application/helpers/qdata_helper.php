@@ -117,6 +117,43 @@
             from musrembang a
             ".$qwhere;
     }
+    function _dmusrenbangJoinFull($where){
+        $qwhere="";
+        if(strlen($where)>0){
+            $qwhere=" where ".$where;
+        }
+        return "
+            select 
+                a.*,b.nama as nmPri,c.nmSub,
+                (select nmDinas from dinas where kdDinas=a.kdKec and taDinas=a.tahun) as nmKec,
+                (select nmDinas from dinas where kdDinas=a.kdDinas and taDinas=a.tahun) as nmDinas
+            from musrembang a
+            join prioritas b on
+                a.prioritas=b.id and
+                a.tahun=b.tahun
+            join psub c on 
+                a.kdSub=c.kdSub and 
+                a.tahun=c.taSub and
+                a.kdDinas=c.kdDinas
+            ".$qwhere;
+    }
+    function _dtotalUsulan($tahun,$tahapan){
+        return "
+            SELECT 
+            (
+                SELECT COUNT(id) FROM musrembang
+                WHERE tahun='".$tahun."' AND tahapan=".$tahapan."
+            ) as u,
+            (
+                SELECT COUNT(id) FROM musrembang
+                WHERE tahun='".$tahun."' AND tahapan=".$tahapan." AND status='DITERIMA'
+            ) as tr,
+            (
+                SELECT COUNT(id) FROM musrembang
+                WHERE tahun='".$tahun."' AND tahapan=".$tahapan." AND status='DITOLAK'
+            ) as tl
+        ";
+    }
     function _drespon($where){
         $qwhere="";
         if(strlen($where)>0){
@@ -229,7 +266,7 @@
         //update
         $nmKeyTabel['u-'.$nm]=array( 
             'kd'=>$unik.$no."/2",
-            'kdJabatan'=>$super, // untuk pergantian pagu anggaran oleh opd
+            'kdJabatan'=>$dev, // untuk pergantian pagu anggaran oleh opd
             'nm'=>($nm."-"),
             'page'=>'update '.$nmPage
         ); 
@@ -428,10 +465,14 @@
         WHERE b.kdFitur like '%".$kodeForm."%' AND b.kdMember='".$kodeMember."' and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
     }
     function _qupdKeyGroup($onOff,$lengthKdPage,$kodeForm,$kodeMember,$tahun,$kdApp){
+        $qkdMember=" kdMember='".$kodeMember."' and ";
+        if($kodeMember==null){
+            $qkdMember="";
+        }
         return "update appkey set kunci=".$onOff."
                 WHERE kdFitur like '%".$kodeForm."%' AND 
                 length(kdFitur)!=".$lengthKdPage." and
-                kdMember='".$kodeMember."' and 
+                ".$qkdMember."
                 ta='".$tahun."' and 
                 kdApp='".$kdApp."'
             ";

@@ -23,6 +23,7 @@
   </main>
   <footer></footer>
   <div id="footer"></div>
+  <div id="sfooter"></div>
 
   <script>
         var router   =<?php echo json_encode(base_url())?>,

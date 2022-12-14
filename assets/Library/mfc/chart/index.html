@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Header</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    
+    <link rel='stylesheet' type='text/css'  href='./../library/import.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <div id="fileMfc">
+
+    </div>
+    <script src='../library/LibMfc.js'></script>
+    <script>
+      const startmfc=new LibMFC();
+      startmfc.startMfc();
+      document.write(startmfc.declarationMfc);
+    </script>
+ 
+</head>
+<body>
+  <main>
+    <script>
+     
+      // view 3
+      // document.write(header_.divider());
+      
+      document.write(
+        style_.rowCol({
+            clsRow:" p-3",
+            col:[
+                {
+                    cls:"-6",
+                    html:card_.ex1({
+                          clsCard: "",
+                          file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+                          clsHeader:" p-2 bg-primary h3",
+                          htmlHeader:"Informasi Penerimaan",
+                          clsBody:"",
+                          htmlBody:chart_.ex1({id:'line',h:'100px',w:'150px'}),
+                        })
+                },
+                {
+                    cls:"-6",
+                    html:card_.ex2({
+                          clsCard: "",
+                          file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+                          clsHeader:"",
+                          htmlHeader:"Informasi Penerimaan",
+                          clsBody:"",
+                          tukar:"Bagus H",
+                          htmlBody:chart_.ex1({id:'bar',w:'150px',h:'100px'}),
+                        })
+                }
+            ]
+        })
+        +card_.ex3({
+            cls:"col-12",
+            html:style_.rowCol({
+                  clsRow:"",
+                  col:[
+                      {
+                          cls:"-6 p-0",
+                          html:card_.ex2({
+                              clsCard: "",
+                              file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+                              clsHeader:"",
+                              htmlHeader:"Informasi Penerimaan",
+                              clsBody:"",
+                              tukar:"Bagus H",
+                              htmlBody:chart_.morirs({id:'mline',w:'150px',h:'100px'}),
+                            }) 
+                      },
+                      {
+                          cls:"-6 ",
+                          html:card_.ex2({
+                          clsCard: "",
+                          file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+                          clsHeader:"",
+                          htmlHeader:"Informasi Penerimaan",
+                          clsBody:"",
+                          tukar:"Bagus H",
+                          htmlBody:chart_.morirs({id:'mbar',w:'150px',h:'100px'}),
+                        }) 
+                      }
+                  ]
+              })
+          })
+          +card_.ex3({
+            cls:"col-12",
+            html:style_.rowCol({
+                  clsRow:"",
+                  col:[
+                      {
+                          cls:"-6 p-0",
+                          html:card_.ex2({
+                              clsCard: "",
+                              file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+                              clsHeader:"",
+                              htmlHeader:"Informasi Penerimaan",
+                              clsBody:"",
+                              tukar:"Bagus H",
+                              htmlBody:chart_.morirs({id:'marea',w:'150px',h:'100px'}),
+                            }) 
+                      },
+                      {
+                          cls:"-6 ",
+                          html:card_.ex2({
+                          clsCard: "",
+                          file:`<svg class="bd-placeholder-img card-img-top" width="100%" height="180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><Header>Placeholder</Header><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>`,
+                          clsHeader:"",
+                          htmlHeader:"Informasi Penerimaan",
+                          clsBody:"",
+                          tukar:"Bagus H",
+                          htmlBody:chart_.morirs({id:'mdonut',w:'150px',h:'100px'}),
+                        }) 
+                      }
+                  ]
+              })
+          })
+      ); 
+      startmfc.endBootstrap(2);
+      chart_.js("../",undefined,"Bagus H");
+    </script> 
+  </main>
+  <script>
+    
+    chart({
+        id:'bar',
+        type:'bar',
+        fz:14,
+        fc:'#71748d',
+        label:["PRA MUSREMBANG", "MUSREMBANG KEC", "FORUM OPD", "MUSREMBANG KAB"],
+        data :[
+                {
+                    label: 'Diterima',
+                    data:[150,140,120,100],
+                    backgroundColor: "green",
+                            borderColor: "#212121",
+                    borderWidth: 2
+                }, {
+                    label: 'Ditolak',
+                    data:[0,10,20,20],
+                    backgroundColor: "red",
+                            borderColor: "#ff6d00",
+                    borderWidth: 2
+                }
+            ]
+    });
+
+    chart({
+        id:'line',
+        type:'line',
+        fz:14,
+        fc:'#71748d',
+        label:["PRA MUSREMBANG", "MUSREMBANG KEC", "FORUM OPD", "MUSREMBANG KAB"],
+        data :[
+                {
+                    label: 'Diterima',
+                    data:[150,140,120,100],
+                    backgroundColor: 'rgba(68, 217, 26, 0.2)',
+                    borderColor: "#212121",
+                    borderWidth: 2
+                }, {
+                    label: 'Ditolak',
+                    data:[0,10,20,20],
+                    backgroundColor: 'rgba(217, 26, 26, 0.2)',
+                    borderColor: "#ff6d00",
+                    borderWidth: 2
+                }
+            ]
+  });
+  
+  let tax_data = [
+        {"period": "2011 Q3", "licensed": 3407, "sorned": 660},
+        {"period": "2011 Q2", "licensed": 3351, "sorned": 629},
+        {"period": "2011 Q1", "licensed": 3269, "sorned": 618},
+        {"period": "2010 Q4", "licensed": 3246, "sorned": 661},
+        {"period": "2009 Q4", "licensed": 3171, "sorned": 676},
+        {"period": "2008 Q4", "licensed": 3155, "sorned": 681},
+        {"period": "2007 Q4", "licensed": 3226, "sorned": 620},
+        {"period": "2006 Q4", "licensed": 3245, "sorned": null},
+        {"period": "2005 Q4", "licensed": 3289, "sorned": null}
+   ];
+  Morris.Line({
+        element: 'mline',
+        data: tax_data,
+        xkey: 'period',
+        ykeys: ['licensed', 'sorned'],
+        labels: ['Licensed', 'Off the road'],
+        lineColors:['#4ECDC4','#ed5565']
+  });
+
+
+
+  Morris.Bar({
+      element: 'mbar',
+      data: [
+      {device: 'iPhone', geekbench: 136},
+      {device: 'iPhone 3G', geekbench: 137},
+      {device: 'iPhone 3GS', geekbench: 275},
+      {device: 'iPhone 4', geekbench: 380},
+      {device: 'iPhone 4S', geekbench: 655},
+      {device: 'iPhone 5', geekbench: 1571}
+      ],
+      xkey: 'device',
+      ykeys: ['geekbench'],
+      labels: ['Geekbench'],
+      barRatio: 0.4,
+      xLabelAngle: 35,
+      hideHover: 'auto',
+      barColors: ['#ac92ec']
+  });
+
+
+  Morris.Donut({
+        element: 'mdonut',
+        data: [
+        {label: 'Jam', value: 25 },
+        {label: 'Frosted', value: 40 },
+        {label: 'Custard', value: 25 },
+        {label: 'Sugar', value: 10 }
+        ],
+        colors: ['#3498db', '#2980b9', '#34495e'],
+        formatter: function (y) { return y + "%" }
+    });
+
+  Morris.Area({
+      element: 'marea',
+      data: [
+      {period: '2010 Q1', iphone: 2666, ipad: null, itouch: 2647},
+      {period: '2010 Q2', iphone: 2778, ipad: 2294, itouch: 2441},
+      {period: '2010 Q3', iphone: 4912, ipad: 1969, itouch: 2501},
+      {period: '2010 Q4', iphone: 3767, ipad: 3597, itouch: 5689},
+      {period: '2011 Q1', iphone: 6810, ipad: 1914, itouch: 2293},
+      {period: '2011 Q2', iphone: 5670, ipad: 4293, itouch: 1881},
+      {period: '2011 Q3', iphone: 4820, ipad: 3795, itouch: 1588},
+      {period: '2011 Q4', iphone: 15073, ipad: 5967, itouch: 5175},
+      {period: '2012 Q1', iphone: 10687, ipad: 4460, itouch: 2028},
+      {period: '2012 Q2', iphone: 8432, ipad: 5713, itouch: 1791}
+      ],
+
+      xkey: 'period',
+      ykeys: ['iphone', 'ipad', 'itouch'],
+      labels: ['iPhone', 'iPad', 'iPod Touch'],
+      hideHover: 'auto',
+      lineWidth: 1,
+      pointSize: 5,
+      lineColors: ['#4a8bc2', '#ff6c60', '#a9d86e'],
+      fillOpacity: 0.5,
+      smooth: true
+  });
+
+
+
+  // var doughnutData = [{
+  //       value: 70,
+  //       color: "#FF6B6B"
+  //   },
+  //   {
+  //       value: 30,
+  //       color: "#fdfdfd"
+  //   }
+  // ];
+  // new Chart(document.getElementById("doughnut").getContext("2d")).Doughnut(doughnutData);
+
+  //   var tax_data = [
+  //       {"period": "2011 Q3", "licensed": 3407, "sorned": 660},
+  //       {"period": "2011 Q2", "licensed": 3351, "sorned": 629},
+  //       {"period": "2011 Q1", "licensed": 3269, "sorned": 618},
+  //       {"period": "2010 Q4", "licensed": 3246, "sorned": 661},
+  //       {"period": "2009 Q4", "licensed": 3171, "sorned": 676},
+  //       {"period": "2008 Q4", "licensed": 3155, "sorned": 681},
+  //       {"period": "2007 Q4", "licensed": 3226, "sorned": 620},
+  //       {"period": "2006 Q4", "licensed": 3245, "sorned": null},
+  //       {"period": "2005 Q4", "licensed": 3289, "sorned": null}
+  //  ];
+  //   Morris.Line({
+  //       element: 'line',
+  //       data: tax_data,
+  //       xkey: 'period',
+  //       ykeys: ['licensed', 'sorned'],
+  //       labels: ['Licensed', 'Off the road'],
+  //       lineColors:['#4ECDC4','#ed5565']
+  //   });
+  //  cdoughnut({
+  //     id:'serverstatus01',
+  //     data:[{
+  //         value: 70,
+  //         color: "#FF6B6B"
+  //     },{
+  //         value: 30,
+  //         color: "#FFF"
+  //     }]
+  // })
+  </script>
+</body>
+</html>

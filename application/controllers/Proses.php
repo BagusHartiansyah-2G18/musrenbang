@@ -10,7 +10,7 @@ class Proses extends CI_Controller {
         $this->dapp=$this->mbgs->_getBasisData();
         $this->kd=$this->sess->kdMember;
         $this->nm=$this->sess->nama;
-        $this->kdJabatan=$this->sess->kdMemberJabatan;
+        $this->kdJabatan=$this->sess->kdJabatan;
         $this->kdDinas=$this->sess->kdDinas;
         $this->tahun=$this->sess->tahun;
         $this->tahapan=$this->sess->tahapan;
@@ -209,11 +209,11 @@ class Proses extends CI_Controller {
             if($check){
                 $this->_['data']=$this->qexec->_func(
                     _dmusrenbangJoin(" 
-                        id=".$this->mbgs->_valforQuery($id)." and
-                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
-                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
-                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
-                        GROUP BY id,kdKec
+                        a.id=".$this->mbgs->_valforQuery($id)." and
+                        a.kdKec='".$val->kdKec."' and a.kdSub='".$val->kdSub."' and 
+                        a.kdDinas='".$val->kdDinas."' and a.tahun='".$val->tahun."' and
+                        a.prioritas='".$val->kdPri."' and a.tahapan='".$this->tahapan."'
+                        GROUP BY a.id,a.kdKec
                     ")
                 );
                 return $this->mbgs->resTrue($this->_);
@@ -249,11 +249,11 @@ class Proses extends CI_Controller {
             if($check){
                 $this->_['data']=$this->qexec->_func(
                     _dmusrenbangJoin(" 
-                        id=".$this->mbgs->_valforQuery($id)." and
-                        kdKec='".$val->kdKec."' and kdSub='".$val->kdSub."' and 
-                        kdDinas='".$val->kdDinas."' and tahun='".$val->tahun."' and
-                        prioritas='".$val->kdPri."' and tahapan='".$this->tahapan."'
-                        GROUP BY id,kdKec
+                        a.id=".$this->mbgs->_valforQuery($id)." and
+                        a.kdKec='".$val->kdKec."' and a.kdSub='".$val->kdSub."' and 
+                        a.kdDinas='".$val->kdDinas."' and a.tahun='".$val->tahun."' and
+                        a.prioritas='".$val->kdPri."' and a.tahapan='".$this->tahapan."'
+                        GROUP BY a.id,a.kdKec
                     ")
                 );
                 return $this->mbgs->resTrue($this->_);
@@ -300,11 +300,16 @@ class Proses extends CI_Controller {
             return $this->mbgs->resFalse("maaf, Pengguna tidak terdeteksi !!!");
         }else{
             $kdkey=_getNKA("p-usu".$this->tahapan,false);
+
+            $kdMemberx=$this->sess->kdMember1;
+            if($this->kdJabatan>1){
+                $kdMemberx=null;
+            }
             $qeuryUpdKey=_qupdKeyGroup(
                 1,
                 strlen($kdkey),
                 $kdkey,
-                $this->sess->kdMember1,
+                $kdMemberx,
                 $this->sess->tahun,
                 $this->dapp['kd']
             );
@@ -315,8 +320,12 @@ class Proses extends CI_Controller {
             $where=" and status='DITERIMA'";
             $qkdKec="";
             if($this->tahapan==1){ //DITERIMA DITOLAK DIUSULKAN
-                $qkdKec=" and`kdKec`=".$this->mbgs->_valforQuery($kdKec)." ";
-                $where=" and status='DIUSULKAN'".$qkdKec; 
+                if($this->kdJabatan==1){
+                    $qkdKec=" and`kdKec`=".$this->mbgs->_valforQuery($kdKec)." ";
+                    $where=" and status='DIUSULKAN'".$qkdKec; 
+                }else{
+                    $where='';
+                }
             }
             $q="
                 delete from `musrembang` where 
@@ -358,9 +367,9 @@ class Proses extends CI_Controller {
             $baseEND=json_decode((base64_decode($_POST['data'])));
             $kdPri   =$baseEND->{'kdPri'};
             $this->_['data']=$this->qexec->_func(_dmusrenbangJoin("
-                tahun='".$this->tahun."' and
-                prioritas='".$kdPri."' and tahapan='".$this->tahapan."'
-                GROUP BY id,kdKec
+                a.tahun='".$this->tahun."' and
+                a.prioritas='".$kdPri."' and a.tahapan='".$this->tahapan."'
+                GROUP BY a.id,a.kdKec
             "));
             return $this->mbgs->resTrue($this->_);
         }

@@ -49,30 +49,74 @@ class Laporan extends CI_Controller {
         // return print_r($files);
         $this->lbgs->previewPdf(base_url().$files);
     }
-    function listSubKegiatan(){
-        $dt=$this->qexec->_func(_dtTamSub(" where taSub='".$this->sess->tahun."'"));
-        if(true){ // untuk export exccell
+    function listUsulan($val){
+        $baseEND=json_decode((base64_decode($val)));
+        $kdKec      =$baseEND->{'kdKec'};
+        $nmKec      =$baseEND->{'nmKec'};
+        $tahapan    =$baseEND->{'tahapan'};
+        $terima     =$baseEND->{'terima'};
+        
+        $status='';
+        switch ($terima) {
+            case 2: $status='DIUSULKAN'; break;
+            case 1: $status='DITERIMA';  break;        
+            case 0:$status='DITOLAK'; break;
+        }
+        if($terima==2 && $tahapan>1){
+            $terima="";
+        }else{
+            $terima=" a.status='".$status."' and";
+        }
+        
+        
+
+        if($kdKec=='0'){
+            $kdKec=" ";
+        }else{
+            $kdKec=" a.kdKec='".$kdKec."' and ";
+        }
+
+        $tahun=$this->qexec->_func(_tahun("where selected=1"))[0]['nama'];
+        $dt=$this->qexec->_func(_dmusrenbangJoinFull(" 
+            a.tahun='".$tahun."' and
+            ".$terima."
+            ".$kdKec."
+            a.tahapan='".$tahapan."'
+            GROUP BY a.id,a.kdKec
+        "));
+        // return _log($dt);
+        $header=[
+            "nmKec"=>$nmKec,
+            "tahun"=>$tahun,
+            "assert"=>base_url(),
+            "status"=>$status,
+            "tahapan"=>$this->getTahapan($tahapan),
+        ];
+        
+        if(false){ // untuk export exccell
             $file="listSubKegiatan";
             header("Content-type: application/vnd-ms-excel");
             header("Content-Disposition: attachment; filename=".$file.".xls");
-            $html=_tblSubKeg($dt);
+            $html=_header($header)
+            ._tblMusrenbang($dt);
             return print_r($html);
         }
 
-        // $dlaporan=array();
-        // array_push($dlaporan,[
-        //     "ORIENTATION"	=>"L",
-        //     "FORMAT"		=>"legal",
-        //     "name"			=>"rese",
-        //     // "preview"       =>true,
-        //     // "preview"       =>false,
-        //     "html"          =>_headerLapiran($this->_)
-        //                     ._informasiRenstra($this->_)
-        //                     ._informasiIndikator($this->_)
-        //                     ._tabelRincianBelanja($this->_)
-        //                     // .$renstra
-        //                     // .$tabel
-        // ]);
+        $dlaporan=array();
+        array_push($dlaporan,[
+            "ORIENTATION"	=>"L",
+            "FORMAT"		=>"legal",
+            "name"			=>$this->getTahapan($tahapan),
+            // "preview"       =>true,
+            // "preview"       =>false,
+            "html"          =>_header($header)
+                                ._tblMusrenbang($dt)
+                            // ._informasiRenstra($this->_)
+                            // ._informasiIndikator($this->_)
+                            // ._tabelRincianBelanja($this->_)
+                            // .$renstra
+                            // .$tabel
+        ]);
         return $this->lbgs->cetakTC($dlaporan);
     }
     function lapoOpd($val){
@@ -105,5 +149,12 @@ class Laporan extends CI_Controller {
         ]);
         return $this->lbgs->cetakTC($dlaporan);
     }
-    
+    function getTahapan($ind){
+        switch ($ind) {
+            case 1: return 'PRA MUSRENBANG';
+            case 2: return 'MUSRENBANG KEC';
+            case 3: return 'FORUM OPD';
+            case 4: return 'MUSRENBANG KAB';
+        }
+    }
 }

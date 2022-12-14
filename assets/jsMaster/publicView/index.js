@@ -1,9 +1,14 @@
 function _onload(data){
     myCode=data.code;
-    _.dt=[];
+    _.dt=data.data;
     _.dinas=data.dinas;
     _.tahun=data.tahun;
 
+    _.u1=data.u1;
+    _.u2=data.u2;
+    _.u3=data.u3;
+    _.u4=data.u4;
+ 
     const main=document.querySelector("main");
 
     header_.hmenu=[];
@@ -77,7 +82,7 @@ function _onload(data){
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         PRA MUSRENBANG <br>
-                        (100 usulan)
+                        (${_.u1.u} usulan)
                     </span>
                 </a>
                 <hr>`
@@ -88,7 +93,7 @@ function _onload(data){
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         MUSRENBANG KECAMATAN <br>
-                        (100 usulan)
+                        (${_.u2.u} usulan)
                     </span>
                 </a>
                 <hr>`
@@ -98,7 +103,7 @@ function _onload(data){
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         FORUM OPD <br>
-                        (100 usulan)
+                        (${_.u3.u} usulan)
                     </span>
                 </a>
                 <hr>`
@@ -108,7 +113,7 @@ function _onload(data){
                     <span class="mdi mdi-collage d-block mdi-18px"></span>
                     <span>
                         MUSRENBANG KABUPATEN<br>
-                        (100 usulan)
+                        (${_.u4.u} usulan)
                     </span>
                 </a>
                 <hr>`
@@ -122,7 +127,7 @@ function _onload(data){
     viewWebsite+=style_.rowCol({
         clsRow:" container-fluid",
         col:[{
-                cls:"-2 p-0 position-sticky h-100 d-inline-block shadow",
+                cls:"-2 p-0 position-sticky d-inline-block shadow",
                 html:menu
             },{
                 cls:"-10",
@@ -144,6 +149,64 @@ function _onload(data){
         clsBody:"",
     });
     $('#footer').html(data.footer+startmfc.endBootstrapHTML(2));
+    $('#sfooter').html(chart_.js(assert+"Library/mfc/","Bagus H"));
+    chart({
+        id:'bar',
+        type:'bar',
+        fz:14,
+        fc:'#71748d',
+        label:["PRA", "KEC", "FORUM", "KAB"],
+        data :[
+                {
+                    label: 'usulan',
+                    data:[_.u1.u,_.u2.u,_.u3.u,_.u4.u],
+                    backgroundColor: "cyan",
+                    borderColor: "#212121",
+                    borderWidth: 2
+                },{
+                    label: 'diterima',
+                    data:[_.u1.tr,_.u2.tr,_.u3.tr,_.u4.tr],
+                    backgroundColor: "green",
+                    borderColor: "#212121",
+                    borderWidth: 2
+                }, {
+                    label: 'ditolak',
+                    data:[_.u1.tl,_.u2.tl,_.u3.tl,_.u4.tl],
+                    backgroundColor: "red",
+                    borderColor: "#ff6d00",
+                    borderWidth: 2
+                }
+            ]
+    });
+
+    chart({
+        id:'line',
+        type:'line',
+        fz:14,
+        fc:'#71748d',
+        label:["PRA", "KEC", "FORUM", "KAB"],
+        data :[
+                {
+                    label: 'usulan',
+                    data:[_.u1.u,_.u2.u,_.u3.u,_.u4.u],
+                    backgroundColor: "rgba(0, 231, 255, 0.3)",
+                    borderColor: "#212121",
+                    borderWidth: 2
+                },{
+                    label: 'diterima',
+                    data:[_.u1.tr,_.u2.tr,_.u3.tr,_.u4.tr],
+                    backgroundColor: "rgba(44, 255, 0, 0.3)",
+                    borderColor: "#212121",
+                    borderWidth: 2
+                }, {
+                    label: 'ditolak',
+                    data:[_.u1.tl,_.u2.tl,_.u3.tl,_.u4.tl],
+                    backgroundColor: "rgba(255, 0, 0, 0.3)",
+                    borderColor: "#ff6d00",
+                    borderWidth: 2
+                }
+            ]
+    });
 }
 function _chartTahapan() {
     return _formNoHeader({
@@ -151,39 +214,27 @@ function _chartTahapan() {
         // style:'background-color:rgba(100,100,100,05)',
         kolom:[
             {
-                size:"6 p-2",
-                form:`<canvas id="chartjs_bar" 
-                        style="display: block; width: 458px; height: 229px;" 
-                        width="458" height="229" 
-                        class="chartjs-render-monitor">
-                    </canvas>`
+                size:"6 p-3 text-center",
+                form:chart_.ex1({id:'bar',w:'150px',h:'100px'})
             },{
-                form:`<canvas id="chartjs_line" 
-                        style="display: block; width: 458px; height: 229px;" 
-                        width="458" height="229" 
-                        class="chartjs-render-monitor">
-                    </canvas>`
+                form:chart_.ex1({id:'line',w:'150px',h:'100px'})
             }
         ]
     })
 }
 function _tabelKecamatan() {
-    return _formIcon({
-        icon:'<i class="mdi mdi-file-check"></i>',
-        text:"Data Musrenbang",
-        classJudul:'',
-        btn:_btn({
-            color:"success",
-            judul:"Donwload OPD",
-            attr:"style='padding:5px;font-size:15px;' onclick='addData()'",
-            // class:"btn btn-success btn-block"
-        }),
-        bgHeader:'bg-primary text-light mt-3',
-        isi:`<div id='tabelShow' class="card">` // k kemaren
-                +setTabel()
-            +`</div>`,
-        id:"form1",
-        sizeCol:'12 shadow',
+    return _formNoHeader({
+        shadow:true,
+        cls:'mt-2',
+        // style:'background-color:rgba(100,100,100,05)',
+        kolom:[
+            {
+                size:"12 p-3 text-center",
+                form:`<div id='tabelShow' class="card">` // k kemaren
+                        +setTabel()
+                    +`</div>`
+            }
+        ]
     })
 }
 function setTabel(){
@@ -194,33 +245,234 @@ function setTabel(){
         ,icon:`<i class="mdi mdi-delete-forever"></i>`
         ,title:"Hapus"
     });
-    fhtml=`
+    let fhtml=`
         <thead>
             <tr style="text-align:center">
-                <th rowspan="2" width="10%">No</th>
-                <th rowspan="2" width="25%">Kecamatan</th>
-                <th colspan="2" width="15%">Musrenbang Pra Kec</th>
-                <th colspan="2" width="15%">Musrenbang Kec</th>
-                <th colspan="2" width="15%">Forum OPD</th>
-                <th colspan="2" width="15%">Musrenbang Final</th>
-                <th rowspan="2" width="10%">Action</th>
-            </tr>
-            <tr style="text-align:center">
-                <th width="10%">Diterima</th>
-                <th width="10%">Ditolak</th>
-                <th width="10%">Diterima</th>
-                <th width="10%">Ditolak</th>
-                <th width="10%">Diterima</th>
-                <th width="10%">Ditolak</th>
-                <th width="10%">Diterima</th>
-                <th width="10%">Ditolak</th>
+                <th width="3%">No</th>
+                <th width="27%">Kecamatan</th>
+                <th width="15%">Usulan PRA Kec</th>
+                <th width="15%">Usulan Kecamatan</th>
+                <th width="15%">Usulan Forum OPD</th>
+                <th width="15%">Usulan Kabupaten</th>
             </tr>
         </thead>
         <tbody>
     `;
-    _.dt.forEach(element => {
-        
+    let u1=0,tr1=0,tl1=0,
+        u2=0,tr2=0,tl2=0,
+        u3=0,tr3=0,tl3=0,
+        u4=0,tr4=0,tl4=0;
+    _.dt.forEach((v,i) => {
+        u1+=Number(v.tr1.u);
+        tr1+=Number(v.tr1.tr);
+        tl1+=Number(v.tr1.tl);
+
+        u2+=Number(v.tr2.u);
+        tr2+=Number(v.tr2.tr);
+        tl2+=Number(v.tr2.tl);
+
+        u3+=Number(v.tr3.u);
+        tr3+=Number(v.tr3.tr);
+        tl3+=Number(v.tr3.tl);
+
+        u4+=Number(v.tr4.u);
+        tr4+=Number(v.tr4.tr);
+        tl4+=Number(v.tr4.tl);
+        fhtml+=`
+            <tr style="text-align:left">
+                <td widtd="5%">${i+1}</td>
+                <td widtd="15%">${v.valueName}</td>
+                <td>
+                    ${button_.ex1(
+                        {
+                          clsGroup:"",
+                          listBtn :[
+                            {
+                              text:`<span class="mdi mdi-cloud-download-outline"></span>  `+v.tr1.u,
+                              cls:" btn-sm btn-info",
+                              attr:`onclick="goLaporan(${i},${1},${2})"`
+                            },{
+                              text:`<span class="mdi mdi-check-all"></span>  `+v.tr1.tr,
+                              cls:" btn-sm btn-success",
+                              attr:`onclick="goLaporan(${i},${1},${1})"`
+                            },{
+                              text:`<span class="mdi mdi-close-box"></span>  `+v.tr1.tl,
+                              cls:" btn-sm btn-danger",
+                              attr:`onclick="goLaporan(${i},${1},${0})"`
+                            }
+                          ],
+                        }
+                      )
+                    }
+                </td>
+
+                <td>
+                    ${button_.ex1(
+                        {
+                        clsGroup:"",
+                        listBtn :[
+                            {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+v.tr2.u,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${i},${2},${2})"`
+                            },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+v.tr2.tr,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${i},${2},${1})"`
+                            },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+v.tr2.tl,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${i},${2},${0})"`
+                            }
+                        ],
+                        }
+                    )}
+                </td>
+                <td>
+                    ${button_.ex1(
+                        {
+                        clsGroup:"",
+                        listBtn :[
+                            {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+v.tr3.u,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${i},${3},${2})"`
+                            },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+v.tr3.tr,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${i},${3},${1})"`
+                            },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+v.tr3.tl,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${i},${3},${0})"`
+                            }
+                        ],
+                        }
+                    )}
+                </td>
+
+                <td>
+                    ${button_.ex1(
+                        {
+                        clsGroup:"",
+                        listBtn :[
+                            {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+v.tr4.u,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${i},${4},${2})"`
+                            },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+v.tr4.tr,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${i},${4},${1})"`
+                            },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+v.tr4.tl,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${i},${4},${0})"`
+                            }
+                        ],
+                        }
+                    )}
+                </td>
+            </tr>
+        `;
     });
+    fhtml+=`
+        <tr style="text-align:left">
+            <td widtd="5%">9</td>
+            <td widtd="15%"><b>Keseluruhan</b></td>
+            <td>
+                ${button_.ex1(
+                    {
+                        clsGroup:"",
+                        listBtn :[
+                        {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+u1,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${9},${1},${2})"`
+                        },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+tr1,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${9},${1},${1})"`
+                        },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+tl1,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${9},${1},${0})"`
+                        }
+                        ],
+                    }
+                    )
+                }
+            </td>
+
+            <td>
+                ${button_.ex1(
+                    {
+                    clsGroup:"",
+                    listBtn :[
+                        {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+u2,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${9},${2},${2})"`
+                        },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+tr2,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${9},${2},${1})"`
+                        },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+tl2,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${9},${2},${0})"`
+                        }
+                    ],
+                    }
+                )}
+            </td>
+            <td>
+                ${button_.ex1(
+                    {
+                    clsGroup:"",
+                    listBtn :[
+                        {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+u3,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${9},${3},${2})"`
+                        },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+tr3,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${9},${3},${1})"`
+                        },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+tl3,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${9},${3},${0})"`
+                        }
+                    ],
+                    }
+                )}
+            </td>
+
+            <td>
+                ${button_.ex1(
+                    {
+                    clsGroup:"",
+                    listBtn :[
+                        {
+                            text:`<span class="mdi mdi-cloud-download-outline"></span>  `+u4,
+                            cls:" btn-sm btn-info",
+                            attr:`onclick="goLaporan(${9},${4},${2})"`
+                        },{
+                            text:`<span class="mdi mdi-check-all"></span>  `+tr4,
+                            cls:" btn-sm btn-success",
+                            attr:`onclick="goLaporan(${9},${4},${1})"`
+                        },{
+                            text:`<span class="mdi mdi-close-box"></span>  `+tl4,
+                            cls:" btn-sm btn-danger",
+                            attr:`onclick="goLaporan(${9},${4},${0})"`
+                        }
+                    ],
+                    }
+                )}
+            </td>
+        </tr>
+    `;
     fhtml+=`</tbody>`;
     return _tabelResponsive(
         {
@@ -263,4 +515,13 @@ function _logined(key) {
             return _toast({bg:'e', msg:res.msg});
         }
     });
+}
+function goLaporan(ind,tahapan,terima) {
+    param={
+        kdKec       :(ind==9?'0':_.dt[ind].value),
+        nmKec       :(ind==9?'All Kecamatan':_.dt[ind].valueName),
+        tahapan     :tahapan,
+        terima      :terima,
+    }
+    _redirectOpen("laporan/listUsulan/"+btoa(JSON.stringify(param)));
 }

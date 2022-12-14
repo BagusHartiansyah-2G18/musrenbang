@@ -1,7 +1,7 @@
 class LibMFC{
     constructor(path){
         // this.pathFBootstrap="../Library/bootstrap-5.2.2/bootstrap-5.2.2/dist/"; //fileBootstrap;
-        this.pathFBootstrap=path+"assets/Library/mfc/library/bootstrap-5.2.2/bootstrap-5.2.2/dist/"; //fileBootstrap;
+        this.pathFBootstrap=path+"assets/Library/mfc/library/bootstrap-5.2.2/bootstrap-5.2.2/dist/";
         this.fileBootstrap=[
             "js/bootstrap.bundle.js","js/bootstrap.bundle.js.map", // 1
             "js/bootstrap.bundle.min.js","js/bootstrap.bundle.min.js.map", // 3
@@ -12,7 +12,7 @@ class LibMFC{
         ];
 
         // this.pathFMfc="../"; //fileBootstrap;
-        this.pathFMfc=path+"assets/Library/mfc/"; //fileBootstrap;
+        this.pathFMfc=path+"assets/Library/mfc/";
         this.fileMfc=[
             "library/LibMfcHtml.js","loader/main.js", // 1
             "header/main.js","dropdonw/main.js", // 3
@@ -21,7 +21,7 @@ class LibMFC{
             "input/main.js","tab/main.js", // 9
             "card/main.js","slider/main.js", // 11
             "modal/main.js","sidebar/main.js",
-            "teditor/main.js",//"js/main.js",
+            "teditor/main.js","chart/main.js",
             //"js/main.js",//"js/main.js",
             //"js/main.js",//"js/main.js",
             
@@ -34,7 +34,7 @@ class LibMFC{
             "const tab_=new Tab_();","const card_=new Card_();",
             "const slider_=new Slider_();","const modal_=new Modal_();",
             "const sidebar_=new Sidebar_();","const teditor_=new Teditor_();",
-            // "const header_=new Header_();","const header_=new Header_();",
+            "const chart_=new Chart_();",//"const header_=new Header_();",
             // "const header_=new Header_();","const header_=new Header_();",
         ];
         this.declarationMfc="";
@@ -56,6 +56,7 @@ class LibMFC{
                 document.write(`<script src='`+this.pathFBootstrap+cv+`'></script>`);   
             }
         });
+        document.write(`<script src='`+this.pathFMfc+`library/sflib.js'></script>`);
     }
     endBootstrapHTML=(start,end)=>{
         let ckon=false;
