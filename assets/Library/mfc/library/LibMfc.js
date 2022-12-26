@@ -1,7 +1,8 @@
 class LibMFC{
     constructor(path){
-        // this.pathFBootstrap="../Library/bootstrap-5.2.2/bootstrap-5.2.2/dist/"; //fileBootstrap;
-        this.pathFBootstrap=path+"assets/Library/mfc/library/bootstrap-5.2.2/bootstrap-5.2.2/dist/";
+        this.pathBTabel="../library/bootstrap/"; //js Tabel Bootstrap;
+        this.pathFBootstrap=this.pathBTabel+"bootstrap-5.2.2/dist/"; //fileBootstrap;
+        this.pathFBootstrap=path+"assets/Library/mfc/library/bootstrap/bootstrap-5.2.2/dist/";
         this.fileBootstrap=[
             "js/bootstrap.bundle.js","js/bootstrap.bundle.js.map", // 1
             "js/bootstrap.bundle.min.js","js/bootstrap.bundle.min.js.map", // 3
@@ -11,7 +12,8 @@ class LibMFC{
             "js/bootstrap.min.js","js/bootstrap.min.js.map", // 11
         ];
 
-        // this.pathFMfc="../"; //fileBootstrap;
+        
+        this.pathFMfc="../"; //file MFC;
         this.pathFMfc=path+"assets/Library/mfc/";
         this.fileMfc=[
             "library/LibMfcHtml.js","loader/main.js", // 1
@@ -58,7 +60,7 @@ class LibMFC{
         });
         document.write(`<script src='`+this.pathFMfc+`library/sflib.js'></script>`);
     }
-    endBootstrapHTML=(start,end)=>{
+    endBootstrapHTML=(start,end,tabel)=>{
         let ckon=false;
         let resp='';
         this.fileBootstrap.forEach((cv,ci) => {
@@ -73,6 +75,38 @@ class LibMFC{
                 resp+=`<script src='`+this.pathFBootstrap+cv+`'></script>`;   
             }
         });
+        if(this.pathFMfc.length==3){
+            resp+=`<script src='`+this.pathFMfc+`library/jquery.js'></script>`;
+        }
+        if(tabel!=undefined){
+            let plugin=this.pathBTabel+'plugins/';
+            let bower=this.pathBTabel+'bower_components/datatables.net-bs/';
+            resp+=`
+                <script src="`+plugin+`datatables/jquery.dataTables.min.js"></script>
+                <script src="`+plugin+`datatables/jquery.dataTables.js"></script>
+
+                <link rel="stylesheet" type="text/css" href="`+plugin+`datatables-bs4/css/dataTables.bootstrap4.min.css">
+                <script src="`+plugin+`datatables-bs4/js/dataTables.bootstrap4.js"></script>
+
+                <script src="`+plugin+`datatables-buttons/js/dataTables.buttons.min.js"></script>
+                
+
+                <script src="`+plugin+`datatables-buttons/js/buttons.html5.min.js"></script>
+
+                <script src="`+plugin+`datatables-buttons/js/buttons.print.min.js"></script>
+
+                <script src="`+plugin+`datatables-buttons/js/buttons.colVis.min.js"></script>
+
+                <script src="`+bower+`plugins/JSZip-2.5.0/jszip.min.js"></script>
+                <script src="`+bower+`plugins/pdfmake-0.1.36/pdfmake.min.js"></script>
+                <script src="`+bower+`plugins/pdfmake-0.1.36/vfs_fonts.js"></script>
+            `;
+        }
+        resp+=`
+            <script src='`+this.pathFMfc+`library/excel/lib/xlsx.js'></script>
+            <script src='`+this.pathFMfc+`library/sflib.js'></script>
+            <script src='`+this.pathFMfc+`library/sfTabel.js'></script>
+        `;
         return resp;
     }
     startMfc=()=>{

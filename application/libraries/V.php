@@ -241,9 +241,10 @@
                 <script src="'.$this->_getAssetUrl()."jsMaster/".'M-HTML-FORM.js"></script>
                 <script src="'.$this->_getAssetUrl()."jsMaster/".'M.js"></script>
                 <script src="'.$this->_getAssetUrl()."jsMaster/".'V.js"></script>
-                <script src="'.$this->_getAssetUrl()."Library/excel/lib/".'xlsx.js"></script>
+                
                 <script src="'.$this->_getAssetUrl()."Library/pdf/".'pdf.js"></script>
             ';
+            // <script src="'.$this->_getAssetUrl()."Library/excel/lib/".'xlsx.js"></script>
             // <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/jszip.js"></script>
             // <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.0/xlsx.js"></script>
             // 
