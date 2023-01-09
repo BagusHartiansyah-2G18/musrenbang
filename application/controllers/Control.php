@@ -76,6 +76,7 @@ class Control extends CI_Controller {
     public function usulan($val){
         $this->sess->tahun=$val;
         $portal=$this->_keamanan(_getNKA("p-usu".$this->sess->tahapan,false));
+        // return print_r($portal);
         if($portal['exec']){
             $this->_['page']="usulan";
             $this->_['param']=$val;
@@ -155,7 +156,7 @@ class Control extends CI_Controller {
     function _checkKeyApp($keyForm,$kdMember){
         $kodeForm=false;
         $kodeForm=$keyForm;
-        // return print_r($this->mbgs->_qCekKey($kodeForm,$kdMember));
+        // return print_r(_cekKey($kodeForm,$kdMember,$this->sess->tahun,$this->dapp['kd']));
         $q=_cekKey($kodeForm,$kdMember,$this->sess->tahun,$this->dapp['kd']);
         $member=$this->qexec->_func($q);
         // hilangkan tanda / jika ada 

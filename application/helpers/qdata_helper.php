@@ -453,7 +453,8 @@
             * 
         FROM member a 
         JOIN appkey b on
-            a.kdMember1 =b.kdMember  
+            a.kdMember1 =b.kdMember AND 
+            a.kdApp=b.kdApp
         WHERE b.kdFitur='".$kodeForm."' AND b.kdMember='".$kodeMember."' AND b.kunci=0 and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
     }
     function _groupKey($kodeForm,$kodeMember,$tahun,$kdApp){
@@ -461,7 +462,8 @@
             kdFitur,kunci
         FROM member a 
         JOIN appkey b on
-            a.kdMember1 =b.kdMember  
+            a.kdMember1 =b.kdMember  AND 
+            a.kdApp=b.kdApp
         WHERE b.kdFitur like '%".$kodeForm."%' AND b.kdMember='".$kodeMember."' and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
     }
     function _qupdKeyGroup($onOff,$lengthKdPage,$kodeForm,$kodeMember,$tahun,$kdApp){

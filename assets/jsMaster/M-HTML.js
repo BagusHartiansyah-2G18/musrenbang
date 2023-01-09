@@ -384,7 +384,7 @@ function _tabelInput(v){
 
    return fdata+=`</tbody>`;
 }
-function _tabel(v){
+function _tabelOld(v){ 
     // _tabel(
     // {
     //     data:_.dusulan
@@ -493,7 +493,7 @@ function _tabel(v){
                 )+`</td>`;
                 kond=false;
             }
-            f1data=v2.split("&");
+            f1data=v2.split("&"); 
             if(f1data.length==2){
                 fdata+=`<td ${actId}>`+v1[f1data[0]]+` `+v1[f1data[1]]+`</td>`;
                 kond=false;

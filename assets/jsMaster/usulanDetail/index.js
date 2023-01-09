@@ -184,7 +184,8 @@ function setTabel(){
             ,title:"Komentari usulan"
         });
     }
-    
+     
+     
     return $('#tabelShow').html(
         _tabelResponsive({
             id:"dt", 

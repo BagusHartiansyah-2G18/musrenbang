@@ -84,6 +84,8 @@ function _tabel(v){
     fdata+=`</tr>
         </thead>
         <tbody>`;
+    
+    let nmId='col',actId='';
     v.data.forEach((v1,i1) => {
         fdata+=`
             <tr>`;
@@ -149,6 +151,26 @@ function _tabel(v){
                 fdata+=`<td>`+_$(
                     Number(v1[f1data[0]])/Number(v1[f1data[1]])
                 )+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("&"); 
+            if(f1data.length==2){
+                fdata+=`<td ${actId}>`+v1[f1data[0]]+` `+v1[f1data[1]]+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("<tm2>");
+            if(f1data.length==2){
+                fdata+=`<td ${actId}>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(0,20)+"...":v1[f1data[0]])+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("<tm3>");
+            if(f1data.length==2){
+                fdata+=`<td ${actId}>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(0,30)+"...":v1[f1data[0]])+`</td>`;
+                kond=false;
+            }
+            f1data=v2.split("<tm5>");
+            if(f1data.length==2){
+                fdata+=`<td ${actId}>`+(v1[f1data[0]].length>20?v1[f1data[0]].substring(0,50)+"...":v1[f1data[0]])+`</td>`;
                 kond=false;
             }
             if(kond){
