@@ -76,10 +76,14 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'root',
-	'password' => '',
-	'database' => 'bappeda',
+	// 'username' => 'root',
+	// 'password' => '',
+	// 'database' => 'bappeda',
+	'username' => 'bapped13_adm',
+	'password' => 'cO.XP.^b=8]Q',
+	'database' => 'bapped13_sipj',
 	'dbdriver' => 'mysqli',
+	
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => FALSE,

@@ -59,7 +59,8 @@ function _formData() {
                     bgHeader:"bg-primary text-light ",
                     attrHeader:`"`,
                     bgForm:"",
-                    isi:_inpComboBox({
+                    isi:
+                        _inpComboBox({
                             judul:"Prioritas",
                             id:"kdPrio",
                             color:"black",  
@@ -69,7 +70,8 @@ function _formData() {
                             method:"sejajar",
                             change:"_changePrio(this)",
                         })
-                        +_inpComboBox({
+                        +
+                        _inpComboBox({
                             judul:"Kecamatan",
                             id:"kdKec",
                             color:"black",  

@@ -46,7 +46,7 @@
             return new Promise(function(res){
                 $.ajax({
                     type:'post',
-                    url:router+url,
+                    url:router+"apps/"+url,
                     data:{
                             data:data
                         },

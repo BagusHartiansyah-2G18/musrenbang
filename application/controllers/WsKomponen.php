@@ -106,6 +106,7 @@ class WsKomponen extends CI_Controller {
 
         $this->_['priotitas']=$this->qexec->_func(_cbPrio(" where tahun='".$this->tahun."'"));
         
+		// return print_r(_dtsubMusrenbang($this->_['dinas'][0]['value'],$this->tahapan," b.idPri=1 and b.taSub='".$this->tahun."' "));
         //ketika pra kecamatan, maka data sub kegiatan
         $this->_['dinas'][0]['data'][0]=$this->qexec->_func(_dtsubMusrenbang($this->_['dinas'][0]['value'],$this->tahapan," b.idPri=1 and b.taSub='".$this->tahun."' "));
 

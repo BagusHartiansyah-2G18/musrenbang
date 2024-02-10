@@ -172,7 +172,7 @@
     function _getNKA($obj,$all){ //nama key Action crud-???
         $nmKeyTabel=array();
         $no=2;
-
+        $devx=[5];
         $dev=[4];
         $super=[3,4];
         $admin=[2,3,4];
@@ -324,7 +324,7 @@
         //Delete
         $nmKeyTabel['d-'.$nm]=array(
             'kd'=>$unik.$no."/3",
-            'kdJabatan'=>$dev,
+            'kdJabatan'=>$devx,
             'nm'=>($nm."-"),
             'page'=>'Delete '.$nmPage
         ); 
@@ -454,7 +454,8 @@
         FROM member a 
         JOIN appkey b on
             a.kdMember1 =b.kdMember AND 
-            a.kdApp=b.kdApp
+            a.kdApp=b.kdApp and 
+			a.tahun = b.ta
         WHERE b.kdFitur='".$kodeForm."' AND b.kdMember='".$kodeMember."' AND b.kunci=0 and b.ta='".$tahun."' and a.kdApp='".$kdApp."'";
     }
     function _groupKey($kodeForm,$kodeMember,$tahun,$kdApp){
